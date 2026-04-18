@@ -1,9 +1,13 @@
 FROM php:8.2-apache
 
-# Copy project files
+RUN a2dismod mpm_event || true
+RUN a2dismod mpm_worker || true
+RUN a2enmod mpm_prefork
+
+RUN docker-php-ext-install mysqli
+
 COPY . /var/www/html/
 
-# Enable Apache mod_rewrite (if needed)
 RUN a2enmod rewrite
 
 EXPOSE 80
