@@ -1,0 +1,238 @@
+/* ============================================================
+   components.css — alerts, tables, badges, modals,
+                    pagination, stage tracker, search, photo
+   ============================================================ */
+
+/* ── Alerts ────────────────────────────────────────────────── */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: .65rem;
+  padding: .85rem 1.1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  font-size: .87rem;
+  line-height: 1.5;
+  border: 1px solid transparent;
+}
+
+.alert i { flex-shrink: 0; margin-top: 2px; font-size: .82rem; }
+
+.alert-success { background: var(--success-bg); color: var(--success); border-color: rgba(52,211,153,.3); }
+.alert-error   { background: var(--danger-bg);  color: var(--danger);  border-color: rgba(248,113,113,.3); }
+.alert-warning { background: var(--warning-bg); color: var(--warning); border-color: rgba(251,191,36,.3); }
+.alert-info    { background: var(--info-bg);    color: var(--info);    border-color: rgba(96,165,250,.3); }
+
+/* Light theme alert text gets darker for readability */
+html[data-theme="light"] .alert-success { color: #0A4E30; border-color: #A8DEC6; }
+html[data-theme="light"] .alert-error   { color: #7A1E1E; border-color: #F0B2B2; }
+html[data-theme="light"] .alert-warning { color: #966200; border-color: #F0D08A; }
+html[data-theme="light"] .alert-info    { color: #0A3E6E; border-color: #A0C8F4; }
+
+/* ── Tables ────────────────────────────────────────────────── */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .84rem;
+}
+
+thead {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Dark: extra darkened header */
+html:not([data-theme="light"]) thead {
+  background: #0F1724;
+}
+
+thead th {
+  padding: .72rem 1rem;
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-soft);
+  white-space: nowrap;
+  font-size: .75rem;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--surface); }
+tbody td { padding: .72rem 1rem; vertical-align: middle; color: var(--text-soft); }
+tbody td strong { color: var(--text); font-weight: 500; }
+.no-data td { text-align: center; color: var(--muted); padding: 3rem 1rem; font-size: .9rem; }
+
+/* ── Status badges ─────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  padding: .18rem .62rem;
+  border-radius: 20px;
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.badge::before { content: '●'; font-size: .5rem; }
+
+.badge-pending     { background: var(--warning-bg); color: var(--warning); border-color: rgba(251,191,36,.35); }
+.badge-in-progress { background: var(--info-bg);    color: var(--info);    border-color: rgba(96,165,250,.35); }
+.badge-completed   { background: var(--success-bg); color: var(--success); border-color: rgba(52,211,153,.35); }
+.badge-rejected    { background: var(--danger-bg);  color: var(--danger);  border-color: rgba(248,113,113,.35); }
+
+html[data-theme="light"] .badge-pending     { border-color: #E8CC88; }
+html[data-theme="light"] .badge-in-progress { border-color: #90C0F0; }
+html[data-theme="light"] .badge-completed   { border-color: #8ED4B4; }
+html[data-theme="light"] .badge-rejected    { border-color: #F0A8A8; }
+
+/* ── Stage tracker ─────────────────────────────────────────── */
+.stage-list { display: flex; flex-direction: column; }
+
+.stage-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: .85rem 0;
+  position: relative;
+}
+
+.stage-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 15px; top: 42px;
+  width: 2px; height: calc(100% - 12px);
+  background: var(--border);
+}
+
+.stage-item.done::after   { background: var(--success); }
+.stage-item.active::after { background: var(--navy-light); }
+
+.stage-dot {
+  width: 32px; height: 32px;
+  border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .76rem; font-weight: 600;
+  border: 2px solid var(--border);
+  background: var(--bg-alt);
+  color: var(--muted);
+  z-index: 1;
+}
+
+.stage-item.done     .stage-dot { background: var(--success);    border-color: var(--success);    color: #0D1117; }
+.stage-item.active   .stage-dot { background: var(--navy-light); border-color: var(--navy-light); color: #fff; }
+.stage-item.rejected .stage-dot { background: var(--danger);     border-color: var(--danger);     color: #fff; }
+
+html[data-theme="light"] .stage-item.done .stage-dot { color: #fff; }
+
+.stage-info { flex: 1; }
+.stage-info h4 { font-size: .88rem; font-weight: 500; color: var(--text); margin-bottom: .2rem; }
+.stage-meta { font-size: .73rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .25rem; }
+.stage-comment {
+  font-size: .77rem; color: var(--text-soft);
+  background: var(--surface);
+  border-left: 2px solid var(--border-mid);
+  padding: .28rem .55rem;
+  border-radius: 0 4px 4px 0;
+  margin-top: .32rem;
+}
+
+/* ── Modal ─────────────────────────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, .7);
+  backdrop-filter: blur(3px);
+  z-index: 2000;
+  align-items: center; justify-content: center;
+  padding: 1rem;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 100%; max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalIn .2s ease-out;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)   translateY(0); }
+}
+
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.15rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-title { font-size: .98rem; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: .4rem; }
+
+.modal-close {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 1.2rem;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 6px;
+}
+
+.modal-close:hover { background: var(--surface); color: var(--text); }
+.modal-body   { padding: 1.5rem; }
+.modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: .6rem; }
+
+/* ── Pagination ────────────────────────────────────────────── */
+.pagination { display: flex; gap: .35rem; flex-wrap: wrap; align-items: center; margin-top: 1.2rem; }
+
+.pagination a,
+.pagination span {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 34px; height: 34px; padding: 0 .5rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  font-size: .82rem; color: var(--text-soft);
+  transition: all .15s;
+}
+
+.pagination a:hover { background: var(--surface); color: var(--text); text-decoration: none; filter: none; }
+.pagination span.current { background: var(--navy-light); color: #fff; border-color: var(--navy-light); font-weight: 500; }
+
+/* ── Search bar ────────────────────────────────────────────── */
+.search-bar { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; margin-bottom: 1.1rem; }
+.search-wrap { position: relative; flex: 1; min-width: 200px; }
+.search-wrap i { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: .8rem; pointer-events: none; }
+.search-wrap input { padding-left: 2.3rem; }
+
+/* ── Photo upload preview ──────────────────────────────────── */
+.photo-preview {
+  width: 110px; height: 130px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  margin-top: .5rem;
+}
+
+.photo-placeholder {
+  width: 110px; height: 130px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 2rem;
+  margin-top: .5rem;
+  background: var(--surface);
+}

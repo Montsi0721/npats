@@ -1,0 +1,99 @@
+/* ============================================================
+   base.css — Reset, root element styles, global typography
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 15px;
+  scroll-behavior: smooth;
+  /* Prevent flash of wrong theme before JS runs */
+  color-scheme: dark;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+  transition: background .25s, color .25s;
+}
+
+a {
+  color: var(--navy-light);
+  text-decoration: none;
+}
+a:hover {
+  filter: brightness(1.2);
+}
+
+img {
+  max-width: 100%;
+}
+
+/* Smooth theme transitions on key properties */
+*,
+*::before,
+*::after {
+  transition:
+    background-color .2s ease,
+    border-color .2s ease,
+    color .2s ease,
+    box-shadow .2s ease;
+}
+
+/* Opt out specific things from transition (avoid jank on hover) */
+.btn,
+a,
+input,
+select,
+textarea,
+.stat-card,
+.modal {
+  transition:
+    background-color .15s ease,
+    border-color .15s ease,
+    color .15s ease,
+    box-shadow .15s ease,
+    transform .15s ease,
+    opacity .15s ease;
+}
+
+/* ── Print ─────────────────────────────────────────────────── */
+@media print {
+  .navbar,
+  .site-footer,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    background: #fff;
+    color: #000;
+  }
+
+  .app-hero {
+    background: #f0f3f8 !important;
+    color: #000 !important;
+  }
+}

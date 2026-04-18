@@ -1,0 +1,387 @@
+/* ============================================================
+   forms.css — Form layouts, inputs, selects, buttons
+   ============================================================ */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+  gap: 1.1rem;
+}
+
+.form-group { display: flex; flex-direction: column; gap: .32rem; }
+.form-group.full { grid-column: 1 / -1; }
+
+label {
+  font-size: .8rem;
+  font-weight: 500;
+  color: var(--text-soft);
+  letter-spacing: .01em;
+}
+
+/* ── Inputs ────────────────────────────────────────────────── */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="tel"],
+input[type="number"],
+input[type="file"],
+select,
+textarea {
+  width: 100%;
+  padding: .6rem .85rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-size: .9rem;
+  font-family: inherit;
+  background: var(--surface);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--navy-light);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, .18);
+}
+
+html[data-theme="light"] input:focus,
+html[data-theme="light"] select:focus,
+html[data-theme="light"] textarea:focus {
+  box-shadow: 0 0 0 3px rgba(29, 90, 158, .12);
+}
+
+input::placeholder, textarea::placeholder { color: var(--muted); }
+input.error { border-color: var(--danger); }
+
+textarea { resize: vertical; min-height: 80px; }
+
+.field-error { font-size: .76rem; color: var(--danger); display: none; }
+.field-error.show { display: block; }
+
+/* ── Input wrapper (prefix icon / eye button) ──────────────── */
+.input-wrap { position: relative; }
+
+.input-wrap i.prefix {
+  position: absolute;
+  left: .85rem; top: 50%; transform: translateY(-50%);
+  color: var(--muted); font-size: .82rem;
+  pointer-events: none;
+}
+
+.input-wrap.has-prefix input { padding-left: 2.3rem; }
+
+.input-wrap .eye-btn {
+  position: absolute;
+  right: .75rem; top: 50%; transform: translateY(-50%);
+  background: none; border: none;
+  cursor: pointer; color: var(--muted); font-size: .95rem; padding: .2rem;
+}
+
+.input-wrap .eye-btn:hover { color: var(--text); }
+
+.form-actions { display: flex; gap: .75rem; margin-top: 1.3rem; flex-wrap: wrap; }
+
+/* ── Buttons ───────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .55rem 1.1rem;
+  border-radius: var(--radius);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  font-size: .85rem; font-weight: 500; font-family: inherit;
+  white-space: nowrap; line-height: 1;
+}
+
+.btn:hover { text-decoration: none; transform: translateY(-1px); filter: none; }
+.btn:active { transform: scale(.97); }
+
+.btn-primary { background: var(--navy-light); color: #fff; border-color: var(--navy-light); }
+.btn-primary:hover { filter: brightness(1.15); }
+
+.btn-gold    { background: var(--gold); color: #fff; border-color: var(--gold); }
+.btn-gold:hover { background: #B07C10; }
+
+.btn-success { background: var(--success); color: #0D1117; border-color: var(--success); }
+.btn-success:hover { filter: brightness(1.1); }
+html[data-theme="light"] .btn-success { color: #fff; }
+
+.btn-danger  { background: var(--danger);  color: #fff; border-color: var(--danger); }
+.btn-danger:hover { filter: brightness(1.1); }
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--border-mid);
+  color: var(--text-soft);
+}
+.btn-outline:hover { background: var(--surface); border-color: var(--muted); color: var(--text); }
+
+.btn-ghost {
+  background: transparent; border-color: transparent; color: var(--muted);
+}
+.btn-ghost:hover { background: var(--surface); color: var(--text); }
+
+.btn-sm   { padding: .33rem .7rem;  font-size: .78rem; border-radius: var(--radius-sm); }
+.btn-lg   { padding: .75rem 1.5rem; font-size: .95rem; border-radius: var(--radius-lg); }
+.btn-full { width: 100%; justify-content: center; }
+.btn-group { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+
+/* ============================================================
+   Enhanced Select & Option Styles
+   ============================================================ */
+
+/* ── Base Select Styling ────────────────────────────────────── */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Select hover state */
+select:hover {
+  border-color: var(--navy-light);
+}
+
+/* Select focus state enhancement */
+select:focus {
+  outline: none;
+  border-color: var(--navy-light);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+}
+
+/* Disabled select */
+select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--surface);
+}
+
+/* Select with error state (matches your existing .error class) */
+select.error {
+  border-color: var(--danger);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23dc2626' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+/* ── Option Elements Styling ────────────────────────────────── */
+option {
+  background: var(--surface);
+  color: var(--text);
+  padding: 0.6rem 0.85rem;
+  font-size: 0.9rem;
+}
+
+/* Option hover state (works in most modern browsers) */
+option:hover {
+  background: var(--navy-light);
+  color: #fff;
+}
+
+/* Selected option styling */
+option:checked {
+  background: var(--navy-light) linear-gradient(0deg, var(--navy-light) 0%, var(--navy-light) 100%);
+  color: #fff;
+}
+
+/* Disabled option */
+option:disabled {
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ── Optgroup Styling ───────────────────────────────────────── */
+optgroup {
+  font-weight: 600;
+  color: var(--text-soft);
+  background: var(--surface);
+  font-style: normal;
+  padding: 0.5rem 0 0.25rem 0;
+}
+
+optgroup::before {
+  content: '';
+  display: block;
+  margin-top: 0.25rem;
+}
+
+optgroup:first-child::before {
+  display: none;
+}
+
+optgroup option {
+  font-weight: normal;
+  padding-left: 1.5rem;
+}
+
+/* ── Select Sizing Variants ─────────────────────────────────── */
+select.select-sm {
+  padding: 0.33rem 2rem 0.33rem 0.7rem;
+  font-size: 0.78rem;
+  background-size: 0.85rem;
+  background-position: right 0.6rem center;
+}
+
+select.select-lg {
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  font-size: 0.95rem;
+  background-size: 1.1rem;
+  background-position: right 1rem center;
+}
+
+/* ── Select Style Variants ──────────────────────────────────── */
+/* Ghost select (transparent background) */
+select.select-ghost {
+  background-color: transparent;
+  border-color: var(--border-mid);
+}
+
+select.select-ghost:hover {
+  background-color: var(--surface);
+}
+
+/* Minimal select (border-bottom only) */
+select.select-minimal {
+  border-color: transparent;
+  background-color: var(--surface);
+  padding: 0.6rem 2rem 0.6rem 0.2rem;
+  border-radius: 0;
+  border-bottom-width: 1.5px;
+  border-bottom-color: var(--border);
+}
+
+select.select-minimal:focus {
+  border-bottom-color: var(--navy-light);
+  box-shadow: none;
+}
+
+/* Pill shaped select */
+select.select-pill {
+  border-radius: 9999px;
+  padding: 0.6rem 2.5rem 0.6rem 1.2rem;
+}
+
+/* Rounded select (softer corners) */
+select.select-rounded {
+  border-radius: var(--radius-lg);
+}
+
+/* ── Multiple Select Styling ────────────────────────────────── */
+select[multiple] {
+  background-image: none;
+  padding: 0.5rem;
+  min-height: 120px;
+  overflow-y: auto;
+}
+
+select[multiple] option {
+  padding: 0.5rem;
+  margin: 0.125rem 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+select[multiple] option:checked {
+  background: var(--navy-light);
+  color: #fff;
+}
+
+select[multiple] option:hover {
+  background: var(--navy-light);
+  color: #fff;
+}
+
+/* Size variants for multiple select */
+select[multiple].select-sm {
+  min-height: 80px;
+}
+
+select[multiple].select-lg {
+  min-height: 160px;
+}
+
+/* ── Select with Icon Wrapper (optional) ────────────────────── */
+.select-icon-wrapper {
+  position: relative;
+  display: block;
+}
+
+.select-icon-wrapper i.prefix {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 0.9rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.select-icon-wrapper.has-prefix select {
+  padding-left: 2.3rem;
+}
+
+/* ── Dark/Light Theme Specific ──────────────────────────────── */
+html[data-theme="light"] select {
+  background-color: var(--surface);
+}
+
+html[data-theme="light"] option {
+  background: #fff;
+  color: #1a1a2e;
+}
+
+html[data-theme="light"] option:checked {
+  background: var(--navy-light);
+  color: #fff;
+}
+
+html[data-theme="light"] optgroup {
+  background: #f5f5f5;
+}
+
+html[data-theme="light"] select.select-minimal {
+  background-color: transparent;
+}
+
+/* ── Responsive Adjustments ─────────────────────────────────── */
+@media (max-width: 640px) {
+  select {
+    font-size: 16px; /* Prevents zoom on iOS when focusing */
+  }
+  
+  select.select-sm,
+  select.select-lg {
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+  }
+}
+
+/* ── Animation for Select Focus ─────────────────────────────── */
+select {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+/* ── Custom Scrollbar for Select Dropdown (Webkit browsers) ─── */
+select::-webkit-scrollbar {
+  width: 8px;
+}
+
+select::-webkit-scrollbar-track {
+  background: var(--surface);
+  border-radius: 4px;
+}
+
+select::-webkit-scrollbar-thumb {
+  background: var(--border-mid);
+  border-radius: 4px;
+}
+
+select::-webkit-scrollbar-thumb:hover {
+  background: var(--navy-light);
+}

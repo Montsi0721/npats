@@ -1,0 +1,324 @@
+/* ============================================================
+   auth.css — Login and signup two-panel layout
+   The left panel stays dark in both themes (it's branded).
+   The right form panel switches with the theme.
+   ============================================================ */
+
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+
+/* ── Left panel (always dark/navy) ─────────────────────────── */
+.auth-panel {
+  background: #0B1525;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 25% 25%, rgba(59, 130, 246, .35) 0%, transparent 55%),
+    radial-gradient(ellipse at 75% 75%, rgba(200, 145, 26, .18) 0%, transparent 55%);
+}
+
+.auth-panel-circles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.auth-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .06);
+}
+
+.auth-circle-1 {
+  width: 380px;
+  height: 380px;
+  top: -100px;
+  right: -120px;
+}
+
+.auth-circle-2 {
+  width: 260px;
+  height: 260px;
+  bottom: -60px;
+  left: -80px;
+}
+
+.auth-circle-3 {
+  width: 160px;
+  height: 160px;
+  top: 40%;
+  left: 30%;
+}
+
+.auth-panel-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: #fff;
+  max-width: 360px;
+}
+
+.auth-crest {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, .08);
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.1rem;
+  margin: 0 auto 1.5rem;
+  color: var(--gold-light);
+}
+
+.auth-panel h1 {
+  font-size: 1.85rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -.025em;
+  margin-bottom: .65rem;
+}
+
+.auth-panel .auth-panel-desc {
+  font-size: .88rem;
+  color: rgba(255, 255, 255, .6);
+  line-height: 1.65;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.auth-panel-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  background: rgba(200, 145, 26, .22);
+  border: 1px solid rgba(200, 145, 26, .38);
+  color: var(--gold-light);
+  font-size: .75rem;
+  font-weight: 500;
+  padding: .32rem .8rem;
+  border-radius: 20px;
+  margin-top: 1.4rem;
+  letter-spacing: .02em;
+}
+
+.auth-features {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  text-align: left;
+}
+
+.auth-feat {
+  display: flex;
+  align-items: flex-start;
+  gap: .8rem;
+  padding: .8rem 1rem;
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: var(--radius);
+}
+
+.auth-feat-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(200, 145, 26, .2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .82rem;
+  color: var(--gold-light);
+  flex-shrink: 0;
+}
+
+.auth-feat-text h4 {
+  font-size: .83rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.auth-feat-text p {
+  font-size: .75rem;
+  color: rgba(255, 255, 255, .5);
+  margin-top: .1rem;
+}
+
+/* ── Right form panel (theme-aware) ────────────────────────── */
+.auth-form-panel {
+  background: var(--bg-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+  overflow-y: auto;
+}
+
+.auth-form-box {
+  width: 100%;
+  max-width: 420px;
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin-bottom: 2.5rem;
+}
+
+.auth-brand-icon {
+  width: 34px;
+  height: 34px;
+  background: var(--navy-light);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: .88rem;
+}
+
+.auth-brand-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.auth-form-box h2 {
+  font-size: 1.55rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -.02em;
+  margin-bottom: .35rem;
+}
+
+.auth-subtitle {
+  font-size: .88rem;
+  color: var(--muted);
+  margin-bottom: 1.75rem;
+}
+
+.auth-footer-link {
+  text-align: center;
+  font-size: .83rem;
+  color: var(--muted);
+  margin-top: 1.25rem;
+}
+
+.auth-footer-link a {
+  color: var(--navy-light);
+  font-weight: 500;
+}
+
+.auth-footer-link a:hover {
+  filter: brightness(1.2);
+}
+
+.auth-demo {
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: .65rem .9rem;
+  font-size: .75rem;
+  color: var(--muted);
+  margin-top: 1.1rem;
+  line-height: 1.75;
+  border-left: 3px solid var(--border-mid);
+}
+
+.auth-demo strong {
+  color: var(--text-soft);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin: 1.1rem 0;
+  font-size: .75rem;
+  color: var(--muted);
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── Mobile: panel behind form (< 700px) ───────────────────── */
+@media (max-width: 700px) {
+  /* Stack everything into a single column */
+  .auth-page {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    position: relative;
+    min-height: 100vh;
+  }
+
+  /* Pin the decorative panel to fill the whole viewport behind the form */
+  .auth-panel {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    /* Keep showing it — don't hide it */
+    display: flex;
+    padding: 2rem;
+    /* Slightly darken so the form stays legible */
+    background: #0B1525;
+  }
+
+  /* Dim features list on mobile so it doesn't distract */
+  .auth-panel .auth-features {
+    display: none;
+  }
+
+  /* Form panel floats above, transparent-ish background so panel shows through */
+  .auth-form-panel {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    background: rgba(13, 17, 23, .82);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 2rem 1.25rem;
+    /* Remove the ::before gradient override from the old code */
+  }
+
+  /* Remove the duplicate ::before that was previously applied on mobile */
+  .auth-form-panel::before {
+    display: none;
+  }
+
+  /* Make form box text readable over the blurred dark overlay */
+  .auth-form-box h2,
+  .auth-brand-name {
+    color: #E2E8F4;
+  }
+
+  .auth-subtitle,
+  .auth-footer-link {
+    color: rgba(255, 255, 255, .5);
+  }
+
+  .auth-footer-link a {
+    color: #60A5FA;
+  }
+}

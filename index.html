@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPATS — National Passport Application Tracking System</title>
+<script>
+    (function() {
+        var t = localStorage.getItem('npats_theme');
+        if(t === 'light') {
+            document.documentElement.setAttribute('data-theme','light');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+        }
+    })()
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+<canvas id="star-canvas" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+
+<!-- ── Navbar ─────────────────────────────────────────────── -->
+<nav class="nav">
+  <a href="#" class="nav-brand">
+    <div class="nav-brand-icon"><i class="fa fa-passport"></i></div>
+    NPATS
+  </a>
+  <div class="nav-links">
+    <a href="#how-it-works" class="nav-link">How it works</a>
+    <a href="#features" class="nav-link">Features</a>
+    <a href="#roles" class="nav-link">Roles</a>
+  </div>
+  <div class="nav-cta">
+    <a href="login.php"><button class="btn-nav-login">Sign in</button></a>
+    <a href="signup.php"><button class="btn-nav-signup"><i class="fa fa-user-plus"></i> Get Started</button></a>
+  </div>
+</nav>
+
+<!-- ── Hero ───────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="orb" style="width:500px;height:500px;background:rgba(59,130,246,.07);top:-150px;left:-100px;"></div>
+  <div class="orb" style="width:400px;height:400px;background:rgba(200,145,26,.05);bottom:-100px;right:-50px;"></div>
+
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Ministry of Home Affairs &mdash; Official System
+    </div>
+
+    <h1 class="hero-title">
+      Your Passport,<br>
+      <span class="blue-accent">Tracked</span> in
+      <span class="accent">Real Time</span>
+    </h1>
+
+    <p class="hero-desc">
+      The National Passport Application Tracking System brings full transparency to every step of your passport journey — from submission to collection.
+    </p>
+
+    <div class="hero-actions">
+      <a href="signup.php">
+        <button class="btn-hero-primary">
+          <i class="fa fa-arrow-right-to-bracket"></i>
+          Create Account
+        </button>
+      </a>
+      <a href="#how-it-works">
+        <button class="btn-hero-secondary">
+          <i class="fa fa-play" style="font-size:.7rem;"></i>
+          See how it works
+        </button>
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num"><span>100%</span></div>
+        <div class="hero-stat-label">Transparent Process</div>
+      </div>
+      <div style="width:1px;height:40px;background:var(--border);"></div>
+      <div>
+        <div class="hero-stat-num"><span>3</span></div>
+        <div class="hero-stat-label">User Roles</div>
+      </div>
+      <div style="width:1px;height:40px;background:var(--border);"></div>
+      <div>
+        <div class="hero-stat-num"><span>7</span></div>
+        <div class="hero-stat-label">Processing Stages</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-down" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">
+    <span>Scroll</span>
+    <div class="scroll-down-line"></div>
+  </div>
+</section>
+
+<!-- ── How it works ────────────────────────────────────────── -->
+<section class="how-section" id="how-it-works">
+  <div class="container">
+    <div style="text-align:center;max-width:560px;margin:0 auto;" class="fade-up">
+      <div class="section-tag"><i class="fa fa-list-check"></i> Simple Process</div>
+      <h2 class="section-title">From application<br>to collection</h2>
+      <p class="section-desc" style="margin:0 auto;">Four steps is all it takes — visit an office, track online, get notified, and collect your passport.</p>
+    </div>
+
+    <div class="how-grid">
+      <div class="how-card fade-up">
+        <canvas class="sc-canvas"></canvas><div class="sc-spotlight"></div>
+        <div class="how-step">Step 01</div>
+        <div class="how-icon blue"><i class="fa fa-user-plus"></i></div>
+        <h3>Create Your Account</h3>
+        <p>Register on NPATS in minutes. Your account is your portal to every application you make.</p>
+      </div>
+      <div class="how-card fade-up" style="transition-delay:.08s">
+        <canvas class="sc-canvas"></canvas><div class="sc-spotlight"></div>
+        <div class="how-step">Step 02</div>
+        <div class="how-icon gold"><i class="fa fa-building-columns"></i></div>
+        <h3>Visit a Passport Office</h3>
+        <p>Submit your physical documents at any authorised office. Officers link your application to your account.</p>
+      </div>
+      <div class="how-card fade-up" style="transition-delay:.16s">
+        <canvas class="sc-canvas"></canvas><div class="sc-spotlight"></div>
+        <div class="how-step">Step 03</div>
+        <div class="how-icon teal"><i class="fa fa-magnifying-glass"></i></div>
+        <h3>Track Every Stage</h3>
+        <p>Follow your passport in real time from submission through biometrics, production and verification.</p>
+      </div>
+      <div class="how-card fade-up" style="transition-delay:.24s">
+        <canvas class="sc-canvas"></canvas><div class="sc-spotlight"></div>
+        <div class="how-step">Step 04</div>
+        <div class="how-icon green"><i class="fa fa-passport"></i></div>
+        <h3>Collect &amp; Go</h3>
+        <p>Get notified the moment your passport is ready. Pick it up at the designated collection point.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Features ────────────────────────────────────────────── -->
+<section class="features-section" id="features">
+  <div class="container">
+    <div style="max-width:560px;" class="fade-up">
+      <div class="section-tag"><i class="fa fa-sparkles"></i> Platform Features</div>
+      <h2 class="section-title">Everything you need,<br>nothing you don't</h2>
+    </div>
+
+    <div class="bento-grid fade-up">
+
+      <!-- Tracker card -->
+      <div class="bento-card span-5">
+        <canvas class="sc-canvas"></canvas><div class="sc-spotlight"></div>
+        <div class="bento-icon blue"><i class="fa fa-route"></i></div>
+        <h3>Live Stage Tracker</h3>
+        <p>Know exactly where your application is at every moment with a visual step-by-step timeline.</p>
+        <div class="mini-tracker">
+          <div class="tracker-step done">
+            <div class="t-dot"><i class="fa fa-check"></i></div>
+            <span class="t-label">Submitted</span>
+          </div>
+          <div class="tracker-step done">
+            <div class="t-dot"><i class="fa fa-check"></i></div>
+            <span class="t-label">Under Review</span>
+          </div>
+          <div class="tracker-step active">
+            <div class="t-dot"><i class="fa fa-circle-dot"></i></div>
+            <span class="t-label">Biometrics Captured</span>
+          </div>
+          <div class="tracker-step pending">
+            <div class="t-dot"></div>
+            <span class="t-label">In Production</span>
+          </div>
+          <div class="tracker-step pending">
+            <div class="t-dot"></div>
+            <span class="t-label">Ready for Collection</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Role-based security -->
+      <div class="bento-card span-7">
+        <canvas class="sc-canvas"></canvas><div class="sc-spotlight"></div>
+        <div class="bento-icon gold"><i class="fa fa-shield-halved"></i></div>
+        <h3>Role-Based Access Control</h3>
+        <p>Three distinct roles — Administrators, Officers and Applicants — each with perfectly scoped permissions. No one sees what they shouldn't.</p>
+        <div class="role-pills">
+          <div class="role-pill">
+            <div class="role-pill-icon" style="background:rgba(248,113,113,.1);color:#F87171;"><i class="fa fa-crown" style="font-size:.7rem;"></i></div>
+            <div>
+              <div class="role-pill-name">Administrator</div>
+              <div class="role-pill-desc">Full system oversight, user management &amp; analytics</div>
+            </div>
+          </div>
+          <div class="role-pill">
+            <div class="role-pill-icon" style="background:rgba(59,130,246,.1);color:#60A5FA;"><i class="fa fa-user-tie" style="font-size:.7rem;"></i></div>
+            <div>
+              <div class="role-pill-name">Passport Officer</div>
+              <div class="role-pill-desc">Process applications, advance stages, add notes</div>
+            </div>
+          </div>
+          <div class="role-pill">
+            <div class="role-pill-icon" style="background:rgba(52,211,153,.1);color:#34D399;"><i class="fa fa-user" style="font-size:.7rem;"></i></div>
+            <div>
+              <div class="role-pill-name">Applicant</div>
+              <div class="role-pill-desc">Track applications, receive notifications</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Applications dashboard -->
+      <div class="bento-card span-8">
+        <canvas class="sc-canvas"></canvas><div class="sc-spotlight"></div>
+        <div class="bento-icon teal"><i class="fa fa-table-list"></i></div>
+        <h3>Applications at a Glance</h3>
+        <p>Officers and administrators get a clean dashboard of all active applications with status, priority and quick-action controls.</p>
+        <div class="status-mock">
+          <div class="status-mock-header"><i class="fa fa-list"></i> Applications — Page 1 of 4</div>
+          <div class="status-mock-row">
+            <span class="status-mock-ref">NP-2025-0041</span>
+            <span class="status-mock-name">Thabo Mokoena</span>
+            <span class="status-pill s-progress">In Progress</span>
+          </div>
+          <div class="status-mock-row">
+            <span class="status-mock-ref">NP-2025-0038</span>
+            <span class="status-mock-name">Lerato Dlamini</span>
+            <span class="status-pill s-approved">Completed</span>
+          </div>
+          <div class="status-mock-row">
+            <span class="status-mock-ref">NP-2025-0035</span>
+            <span class="status-mock-name">Nthabiseng Khosi</span>
+            <span class="status-pill s-pending">Pending</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="bento-card span-4">
+        <canvas class="sc-canvas"></canvas><div class="sc-spotlight"></div>
+        <div class="bento-icon purple"><i class="fa fa-bell"></i></div>
+        <h3>Instant Notifications</h3>
+        <p>Applicants are notified in-app the moment their passport status changes — zero manual follow-up required.</p>
+      </div>
+
+      <!-- Security -->
+      <div class="bento-card span-6">
+        <canvas class="sc-canvas"></canvas><div class="sc-spotlight"></div>
+        <div class="bento-icon red"><i class="fa fa-lock"></i></div>
+        <h3>Secure by Design</h3>
+        <p>Bcrypt-hashed passwords, session regeneration, activity logging, and role-gated routes give officers and applicants peace of mind.</p>
+      </div>
+
+      <!-- Dark/light -->
+      <div class="bento-card span-6">
+        <canvas class="sc-canvas"></canvas><div class="sc-spotlight"></div>
+        <div class="bento-icon green"><i class="fa fa-moon"></i></div>
+        <h3>Dark &amp; Light Theme</h3>
+        <p>Automatically remembers your preference across sessions. Comfortable for daytime office use and late-night review alike.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Roles ────────────────────────────────────────────────── -->
+<section class="roles-section" id="roles">
+  <div class="container">
+    <div style="text-align:center;max-width:560px;margin:0 auto;" class="fade-up">
+      <div class="section-tag"><i class="fa fa-users"></i> For everyone</div>
+      <h2 class="section-title">One system,<br>three perspectives</h2>
+      <p class="section-desc" style="margin:0 auto;">Whether you manage the system, process applications, or submit one — NPATS gives you exactly what you need.</p>
+    </div>
+
+    <div class="roles-grid" style="margin-top:3rem;">
+      <div class="role-card admin fade-up">
+        <canvas class="sc-canvas"></canvas><div class="sc-spotlight"></div>
+        <div class="role-card-top">
+          <div class="role-card-icon"><i class="fa fa-crown"></i></div>
+          <div>
+            <div class="role-card-title">Administrator</div>
+            <div class="role-card-subtitle">System management &amp; oversight</div>
+          </div>
+        </div>
+        <div class="role-abilities">
+          <div class="role-ability"><i class="fa fa-check"></i> Manage all user accounts</div>
+          <div class="role-ability"><i class="fa fa-check"></i> View system-wide analytics</div>
+          <div class="role-ability"><i class="fa fa-check"></i> Assign and revoke officer roles</div>
+          <div class="role-ability"><i class="fa fa-check"></i> Access full audit and activity logs</div>
+          <div class="role-ability"><i class="fa fa-check"></i> Override application statuses</div>
+        </div>
+      </div>
+
+      <div class="role-card officer fade-up" style="transition-delay:.1s">
+        <canvas class="sc-canvas"></canvas><div class="sc-spotlight"></div>
+        <div class="role-card-top">
+          <div class="role-card-icon"><i class="fa fa-user-tie"></i></div>
+          <div>
+            <div class="role-card-title">Passport Officer</div>
+            <div class="role-card-subtitle">Application processing</div>
+          </div>
+        </div>
+        <div class="role-abilities">
+          <div class="role-ability"><i class="fa fa-check"></i> Create and link new applications</div>
+          <div class="role-ability"><i class="fa fa-check"></i> Advance stages and add notes</div>
+          <div class="role-ability"><i class="fa fa-check"></i> Capture biometric records</div>
+          <div class="role-ability"><i class="fa fa-check"></i> Reject with documented reasons</div>
+          <div class="role-ability"><i class="fa fa-check"></i> View assigned workload dashboard</div>
+        </div>
+      </div>
+
+      <div class="role-card applicant fade-up" style="transition-delay:.2s">
+        <canvas class="sc-canvas"></canvas><div class="sc-spotlight"></div>
+        <div class="role-card-top">
+          <div class="role-card-icon"><i class="fa fa-user"></i></div>
+          <div>
+            <div class="role-card-title">Applicant</div>
+            <div class="role-card-subtitle">Passport tracking portal</div>
+          </div>
+        </div>
+        <div class="role-abilities">
+          <div class="role-ability"><i class="fa fa-check"></i> Register a free account online</div>
+          <div class="role-ability"><i class="fa fa-check"></i> View all your applications</div>
+          <div class="role-ability"><i class="fa fa-check"></i> Track live processing stages</div>
+          <div class="role-ability"><i class="fa fa-check"></i> Receive in-app notifications</div>
+          <div class="role-ability"><i class="fa fa-check"></i> Access stage-by-stage history</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ──────────────────────────────────────────────────── -->
+<section class="cta-section">
+  <div class="cta-inner fade-up">
+    <div class="cta-badge"><i class="fa fa-bolt"></i> Ready to start</div>
+    <h2 class="cta-title">Track your passport<br>with confidence</h2>
+    <p class="cta-desc">Create a free applicant account and connect to your passport applications at any participating office.</p>
+    <div class="cta-actions">
+      <a href="signup.php">
+        <button class="btn-hero-primary" style="font-size:.9rem;padding:.75rem 1.9rem;">
+          <i class="fa fa-user-plus"></i> Create Free Account
+        </button>
+      </a>
+      <a href="login.php">
+        <button class="btn-hero-secondary" style="font-size:.9rem;padding:.75rem 1.7rem;">
+          <i class="fa fa-arrow-right-to-bracket"></i> Sign In
+        </button>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ──────────────────────────────────────────────── -->
+<footer>
+  <div>
+    <div class="footer-brand">
+      <div class="nav-brand-icon" style="width:30px;height:30px;font-size:.78rem;"><i class="fa fa-passport"></i></div>
+      NPATS
+    </div>
+    <p class="footer-desc">National Passport Application Tracking System — Ministry of Home Affairs.</p>
+  </div>
+
+  <div class="footer-links">
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <a href="#how-it-works">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#roles">Roles</a>
+    </div>
+    <div class="footer-col">
+      <h4>Account</h4>
+      <a href="index.php">Sign In</a>
+      <a href="signup.php">Create Account</a>
+    </div>
+  </div>
+
+  <div class="footer-legal" id="footer-legal"></div>
+</footer>
+
+<script>
+// ── Spotlight card effects ────────────────────────────────
+(function() {
+  const STEP = 1.5, MAX_DIST = 260, RADIUS = 12;
+  let mx = -9999, my = -9999;
+  const particles = [];
+
+  // Per-card color map based on class / icon color
+  function getCardColor(card) {
+    if (card.classList.contains('admin'))     return '248,113,113';
+    if (card.classList.contains('officer'))   return '59,130,246';
+    if (card.classList.contains('applicant')) return '52,211,153';
+    const icon = card.querySelector('.bento-icon, .how-icon');
+    if (icon) {
+      if (icon.classList.contains('blue'))   return '59,130,246';
+      if (icon.classList.contains('gold'))   return '200,145,26';
+      if (icon.classList.contains('green'))  return '52,211,153';
+      if (icon.classList.contains('teal'))   return '45,212,191';
+      if (icon.classList.contains('red'))    return '248,113,113';
+      if (icon.classList.contains('purple')) return '167,139,250';
+    }
+    return '99,130,246';
+  }
+
+  function sampleBorder(W, H, r) {
+    const pts = [], PI = Math.PI;
+    const push = (x, y) => pts.push({x, y});
+    function line(x0,y0,x1,y1) {
+      const n = Math.ceil(Math.hypot(x1-x0, y1-y0) / STEP);
+      for (let i = 0; i < n; i++) { const t=i/n; push(x0+(x1-x0)*t, y0+(y1-y0)*t); }
+    }
+    function arc(cx, cy, a0, a1) {
+      const n = Math.ceil(Math.abs(a1-a0)*r/STEP);
+      for (let i = 0; i <= n; i++) { const a=a0+(a1-a0)*(i/n); push(cx+r*Math.cos(a), cy+r*Math.sin(a)); }
+    }
+    line(r,0,W-r,0); arc(W-r,r,-PI/2,0); line(W,r,W,H-r); arc(W-r,H-r,0,PI/2);
+    line(W-r,H,r,H); arc(r,H-r,PI/2,PI); line(0,H-r,0,r); arc(r,r,PI,3*PI/2);
+    return pts;
+  }
+
+  function nearestOnSeg(ax,ay,bx,by,px,py) {
+    const dx=bx-ax, dy=by-ay, l2=dx*dx+dy*dy;
+    if (l2===0) return {x:ax,y:ay};
+    const t=Math.max(0,Math.min(1,((px-ax)*dx+(py-ay)*dy)/l2));
+    return {x:ax+t*dx, y:ay+t*dy};
+  }
+
+  // ── Particle burst ──────────────────────────────────────
+  const pCanvas = document.createElement('canvas');
+  pCanvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;';
+  document.body.appendChild(pCanvas);
+  const pCtx = pCanvas.getContext('2d');
+
+  function resizeP() { pCanvas.width=window.innerWidth; pCanvas.height=window.innerHeight; }
+  resizeP(); window.addEventListener('resize', resizeP);
+
+  function spawnBurst(x, y, rgb) {
+    for (let i = 0; i < 32; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 4.5 + 1.2;
+      particles.push({
+        x, y, vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed,
+        r: Math.random()*2+0.6, alpha:1,
+        decay: Math.random()*0.022+0.013, rgb,
+        trail: []
+      });
+    }
+  }
+
+  function drawParticles() {
+    pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+    for (let i = particles.length-1; i >= 0; i--) {
+      const p = particles[i];
+      p.trail.push({x:p.x, y:p.y});
+      if (p.trail.length > 7) p.trail.shift();
+      p.x += p.vx; p.y += p.vy;
+      p.vy += 0.1; p.vx *= 0.97; p.vy *= 0.97;
+      p.alpha -= p.decay;
+      if (p.alpha <= 0) { particles.splice(i,1); continue; }
+      for (let t = 0; t < p.trail.length-1; t++) {
+        const ta = p.alpha * (t/p.trail.length) * 0.35;
+        pCtx.strokeStyle = `rgba(${p.rgb},${ta.toFixed(3)})`;
+        pCtx.lineWidth = p.r * (t/p.trail.length);
+        pCtx.beginPath();
+        pCtx.moveTo(p.trail[t].x, p.trail[t].y);
+        pCtx.lineTo(p.trail[t+1].x, p.trail[t+1].y);
+        pCtx.stroke();
+      }
+      pCtx.fillStyle = `rgba(${p.rgb},${p.alpha.toFixed(3)})`;
+      pCtx.beginPath(); pCtx.arc(p.x, p.y, p.r, 0, Math.PI*2); pCtx.fill();
+    }
+  }
+
+  // ── Per-card state ──────────────────────────────────────
+  const allCards = [...document.querySelectorAll('.how-card, .bento-card, .role-card')];
+  const tiltState = new Map();
+
+  allCards.forEach(card => {
+    const rgb = getCardColor(card);
+    card.dataset.scColor = rgb;
+    tiltState.set(card, {rx:0, ry:0, trx:0, try:0});
+
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
+      const dx = (e.clientX-cx)/(rect.width/2);
+      const dy = (e.clientY-cy)/(rect.height/2);
+      const s = tiltState.get(card);
+      s.trx = -dy * 8; s.try = dx * 8;
+    });
+    card.addEventListener('mouseleave', () => {
+      const s = tiltState.get(card);
+      s.trx = 0; s.try = 0;
+    });
+    card.addEventListener('click', e => {
+      spawnBurst(e.clientX, e.clientY, rgb);
+    });
+  });
+
+  // ── Draw border glow ────────────────────────────────────
+  function drawBorder(card, canvas) {
+    const rect = card.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    const W = rect.width, H = rect.height;
+    const cw = Math.round(W*dpr), ch = Math.round(H*dpr);
+    if (canvas.width !== cw || canvas.height !== ch) {
+      canvas.width = cw; canvas.height = ch;
+      canvas.style.width = W+'px'; canvas.style.height = H+'px';
+      card._pts = null;
+    }
+    if (!card._pts) card._pts = sampleBorder(W, H, RADIUS);
+
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, cw, ch); ctx.save(); ctx.scale(dpr, dpr);
+    const lx = mx - rect.left, ly = my - rect.top;
+    const rgb = card.dataset.scColor;
+    const pts = card._pts;
+    ctx.lineWidth = 1.5; ctx.lineCap = 'butt';
+
+    for (let i = 0; i < pts.length-1; i++) {
+      const ax=pts[i].x, ay=pts[i].y, bx=pts[i+1].x, by=pts[i+1].y;
+      const n = nearestOnSeg(ax, ay, bx, by, lx, ly);
+      const d = Math.hypot(lx-n.x, ly-n.y);
+      if (d >= MAX_DIST) continue;
+      const a = Math.pow(1 - d/MAX_DIST, 2);
+      ctx.strokeStyle = `rgba(${rgb},${a.toFixed(3)})`;
+      ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
+    }
+
+    const sp = card.querySelector('.sc-spotlight');
+    if (sp) {
+      const inside = lx>=0 && lx<=W && ly>=0 && ly<=H;
+      if (inside) {
+        sp.style.background = `radial-gradient(circle at ${(lx/W*100).toFixed(1)}% ${(ly/H*100).toFixed(1)}%, rgba(${rgb},0.07) 0%, transparent 60%)`;
+        sp.style.opacity = '1';
+      } else {
+        sp.style.opacity = '0';
+      }
+    }
+    ctx.restore();
+  }
+
+  // ── Tilt update ─────────────────────────────────────────
+  function updateTilts() {
+    allCards.forEach(card => {
+      const s = tiltState.get(card);
+      s.rx += (s.trx - s.rx) * 0.1;
+      s.ry += (s.try - s.ry) * 0.1;
+      card.style.transform = `rotateX(${s.rx.toFixed(2)}deg) rotateY(${s.ry.toFixed(2)}deg)`;
+    });
+  }
+
+  // ── RAF loop ────────────────────────────────────────────
+  function tick() {
+    updateTilts();
+    drawParticles();
+    allCards.forEach(card => {
+      const canvas = card.querySelector('.sc-canvas');
+      if (canvas) drawBorder(card, canvas);
+    });
+    requestAnimationFrame(tick);
+  }
+
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  requestAnimationFrame(tick);
+})();
+</script>
+
+<script>
+// ── Reactive stars ────────────────────────────────────────
+(function() {
+  const canvas = document.getElementById('star-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, stars = [];
+  let mx = -9999, my = -9999, tx = -9999, ty = -9999;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    initStars();
+  }
+
+  function initStars() {
+    stars = Array.from({ length: 160 }, () => ({
+      ox: Math.random() * W, oy: Math.random() * H,
+      x: 0, y: 0, vx: 0, vy: 0,
+      r: Math.random() * 0.9 + 0.25,
+      baseAlpha: Math.random() * 0.5 + 0.1,
+      alpha: 0,
+      twSpd: Math.random() * 0.0008 + 0.0003,
+      twPh:  Math.random() * Math.PI * 2,
+    }));
+    stars.forEach(s => { s.x = s.ox; s.y = s.oy; });
+  }
+
+  function draw(ts) {
+    ctx.clearRect(0, 0, W, H);
+    tx += (mx - tx) * 0.1;
+    ty += (my - ty) * 0.1;
+
+    for (const s of stars) {
+      const dx = tx - s.x, dy = ty - s.y;
+      const dist = Math.hypot(dx, dy);
+
+      if (dist < 130 && tx > 0) {
+        const force = (1 - dist / 130) * 0.045 * 2.5;
+        const nx = dx / dist || 0, ny = dy / dist || 0;
+        s.vx -= nx * force * (130 - dist);
+        s.vy -= ny * force * (130 - dist);
+      }
+
+      s.vx += (s.ox - s.x) * 0.06;
+      s.vy += (s.oy - s.y) * 0.06;
+      s.vx *= 0.78; s.vy *= 0.78;
+      s.x  += s.vx;  s.y  += s.vy;
+
+      const cd    = Math.hypot(mx - s.x, my - s.y);
+      const boost = cd < 190 ? Math.pow(1 - cd / 190, 1.5) * 0.65 : 0;
+      const twink = s.baseAlpha * (0.45 + 0.55 * Math.sin(ts * s.twSpd + s.twPh));
+      s.alpha = Math.min(1, twink + boost);
+
+      ctx.fillStyle = `rgba(255,255,255,${s.alpha.toFixed(3)})`;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r + boost * 1.4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  resize();
+  requestAnimationFrame(draw);
+})();
+</script>
+
+<script>
+// ── Scroll-triggered fade-up ──────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.fade-up').forEach((el, i) => {
+  // Stagger cards in a grid
+  const parent = el.closest('.how-grid, .bento-grid, .roles-grid');
+  if (parent) {
+    const siblings = [...parent.querySelectorAll('.fade-up')];
+    const idx = siblings.indexOf(el);
+    el.style.transitionDelay = (idx * 0.07) + 's';
+  }
+  observer.observe(el);
+});
+
+// ── Navbar scroll tint ────────────────────────────────────
+const nav = document.querySelector('.nav');
+window.addEventListener('scroll', () => {
+  nav.style.background = window.scrollY > 40
+    ? 'rgba(8,14,26,.97)'
+    : 'rgba(8,14,26,.85)';
+}, { passive: true });
+
+const year = new Date().getFullYear();
+
+document.getElementById("footer-legal").innerHTML = `
+  &copy; ${year} Ministry of Home Affairs<br>
+  All rights reserved
+`;
+</script>
+
+</body>
+</html>
