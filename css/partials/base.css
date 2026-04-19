@@ -71,29 +71,3 @@ textarea,
     transform .15s ease,
     opacity .15s ease;
 }
-
-/* ── Print ─────────────────────────────────────────────────── */
-@media print {
-  .navbar,
-  .site-footer,
-  .no-print {
-    display: none !important;
-  }
-
-  body {
-    background: #fff;
-    color: #000;
-  }
-
-  .card {
-    box-shadow: none;
-    border: 1px solid #ccc;
-    background: #fff;
-    color: #000;
-  }
-
-  .app-hero {
-    background: #f0f3f8 !important;
-    color: #000 !important;
-  }
-}

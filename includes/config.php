@@ -41,7 +41,7 @@ function getDB(): PDO {
 function isLoggedIn(): bool   { return isset($_SESSION['user_id']); }
 
 function requireLogin(): void {
-    if (!isLoggedIn()) { header('Location: '.APP_URL.'/index.php'); exit; }
+    if (!isLoggedIn()) { header('Location: '.APP_URL.'/login.php'); exit; }
 }
 
 function requireRole(string ...$roles): void {

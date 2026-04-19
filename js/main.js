@@ -1,10 +1,4 @@
-// ============================================================
-// NPATS — main.js
-// ============================================================
-
 // ── Theme toggle ────────────────────────────────────────────
-// Dark is default. User preference is saved in localStorage.
-// Apply theme BEFORE paint to avoid flash (also done inline in header).
 (function applyTheme() {
   const saved = localStorage.getItem('npats_theme');
   if (saved === 'light') {
@@ -15,8 +9,7 @@
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
-
-  // ── Theme button ─────────────────────────────────────────
+  // ── Theme button
   const themeBtn = document.getElementById('themeToggle');
   if (themeBtn) {
     themeBtn.addEventListener('click', () => {
@@ -31,11 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ── Mobile nav ───────────────────────────────────────────
+  // ── Mobile nav
   const hamburger = document.getElementById('hamburger');
   const navLinks  = document.getElementById('navLinks');
   if (hamburger && navLinks) {
-    hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+    hamburger.addEventListener('click', () => { 
+      navLinks.classList.toggle('open');
+    });
     document.addEventListener('click', e => {
       if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
         navLinks.classList.remove('open');
@@ -174,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-print]').forEach(btn =>
     btn.addEventListener('click', () => window.print()));
 
-}); // end DOMContentLoaded
+});
 
 // Exposed globally for inline onclick handlers in PHP templates
 function openModal(id)  { document.getElementById(id)?.classList.add('open'); }

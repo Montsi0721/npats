@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <title>Sign In — NPATS</title>
 <script>(function(){var t=localStorage.getItem('npats_theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');}else{document.documentElement.removeAttribute('data-theme');}})()</script>
 <link rel="stylesheet" href="<?= APP_URL ?>/css/main.css">
+<link rel="icon" type="image/svg+xml" href="<?= APP_URL ?>/assets/headerIcon.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body style="display:block;">
