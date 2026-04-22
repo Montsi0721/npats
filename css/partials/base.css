@@ -71,3 +71,146 @@ textarea,
     transform .15s ease,
     opacity .15s ease;
 }
+
+/* ============================================================
+   PREMIUM SCROLLBAR STYLING — Dark & Light Theme Support
+   ============================================================ */
+
+/* Webkit browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-mid);
+  border-radius: 10px;
+  transition: background .2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--navy-light);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--surface);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-mid) var(--surface);
+}
+
+/* Custom scrollbar for specific elements with overflow */
+.modal-body,
+.table-wrapper,
+.custom-select-dropdown,
+.stage-timeline,
+.sidebar-card .card-body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--navy-light) var(--surface);
+}
+
+.modal-body::-webkit-scrollbar,
+.table-wrapper::-webkit-scrollbar,
+.custom-select-dropdown::-webkit-scrollbar,
+.stage-timeline::-webkit-scrollbar,
+.sidebar-card .card-body::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track,
+.table-wrapper::-webkit-scrollbar-track,
+.custom-select-dropdown::-webkit-scrollbar-track,
+.stage-timeline::-webkit-scrollbar-track,
+.sidebar-card .card-body::-webkit-scrollbar-track {
+  background: var(--surface);
+  border-radius: 10px;
+}
+
+.modal-body::-webkit-scrollbar-thumb,
+.table-wrapper::-webkit-scrollbar-thumb,
+.custom-select-dropdown::-webkit-scrollbar-thumb,
+.stage-timeline::-webkit-scrollbar-thumb,
+.sidebar-card .card-body::-webkit-scrollbar-thumb {
+  background: var(--navy-light);
+  border-radius: 10px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover,
+.table-wrapper::-webkit-scrollbar-thumb:hover,
+.custom-select-dropdown::-webkit-scrollbar-thumb:hover,
+.stage-timeline::-webkit-scrollbar-thumb:hover,
+.sidebar-card .card-body::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-light);
+}
+
+/* Hide scrollbar when not needed on certain elements (optional) */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for code/monospace blocks */
+code,
+pre,
+.monospace {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold-light) var(--surface);
+}
+
+code::-webkit-scrollbar,
+pre::-webkit-scrollbar,
+.monospace::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+code::-webkit-scrollbar-thumb,
+pre::-webkit-scrollbar-thumb,
+.monospace::-webkit-scrollbar-thumb {
+  background: var(--gold-light);
+  border-radius: 10px;
+}
+
+/* Active scrollbar state when clicking/dragging */
+::-webkit-scrollbar-thumb:active {
+  background: var(--gold-light);
+}
+
+/* Light theme specific scrollbar adjustments */
+html[data-theme="light"] ::-webkit-scrollbar-track {
+  background: #E5E7EB;
+}
+
+html[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #9CA3AF;
+}
+
+html[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: #6B7280;
+}
+
+html[data-theme="light"] * {
+  scrollbar-color: #9CA3AF #E5E7EB;
+}
+
+/* For dropdown menus that need higher z-index scrollbars */
+.custom-select-dropdown {
+  scrollbar-width: thin;
+}

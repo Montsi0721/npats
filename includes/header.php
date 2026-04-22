@@ -35,6 +35,7 @@ $currentPath = $_SERVER['PHP_SELF'] ?? '';
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#131A26">
 <title><?= e($pageTitle ?? 'NPATS') ?> — National Passport Application Tracking System</title>
 
 <!-- Anti-flash: apply saved theme before first paint -->
@@ -107,7 +108,8 @@ $currentPath = $_SERVER['PHP_SELF'] ?? '';
 
     <!-- Logout -->
     <li>
-      <a href="<?= APP_URL ?>/logout.php" class="nav-logout">
+      <a href="<?= APP_URL ?>/logout.php" class="nav-logout"
+        onclick="return confirm('Are you sure you want to logout?')">
         <i class="fa fa-arrow-right-from-bracket"></i> Logout
       </a>
     </li>

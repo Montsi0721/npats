@@ -206,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </form>
 
       <div class="auth-footer-link">
-        Already have an account? <a href="<?= APP_URL ?>/index.php">Sign in</a>
+        Already have an account? <a href="<?= APP_URL ?>/login.php">Sign in</a>
       </div>
     </div>
   </div>

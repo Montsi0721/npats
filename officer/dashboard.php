@@ -27,9 +27,10 @@ $doneRatio = round($completed / $total * 100);
 $pageTitle = 'Officer Dashboard';
 include __DIR__ . '/../includes/header.php';
 ?>
+
 <style>
 /* ─────────────────────────────────────────────────────────────
-   OFFICER DASHBOARD  — Premium Edition
+   OFFICER DASHBOARD  — Premium Edition with Spotlight Effect
    ───────────────────────────────────────────────────────────── */
 
 /* ── Entry animations ──────────────────────────────────────── */
@@ -60,6 +61,58 @@ include __DIR__ . '/../includes/header.php';
 .od-animate-d4 { animation-delay:.24s }
 .od-animate-d5 { animation-delay:.30s }
 .od-animate-d6 { animation-delay:.36s }
+
+/* ── Spotlight Card Effect ───────────────────────────────── */
+.hover-card {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.hover-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
+              rgba(59, 130, 246, 0.15) 0%, 
+              transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hover-card:hover::before {
+  opacity: 1;
+}
+
+.hover-card:hover {
+  transform: translateY(-4px) scale(1.01);
+}
+
+/* Spotlight canvas overlay */
+.sc-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  border-radius: inherit;
+}
+
+.sc-spotlight {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
 
 /* ── Hero ──────────────────────────────────────────────────── */
 .od-hero {
@@ -165,7 +218,7 @@ html[data-theme="light"] .od-hero { background: #0B2545; border-color: rgba(59,1
   background: #34D399; animation: pulse-ring 2s infinite;
 }
 
-/* ── Stat cards ────────────────────────────────────────────── */
+/* ── Stat cards (with spotlight) ────────────────────────────── */
 .od-stats {
   display: grid;
   grid-template-columns: repeat(5,1fr);
@@ -180,22 +233,43 @@ html[data-theme="light"] .od-hero { background: #0B2545; border-color: rgba(59,1
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 1.15rem 1.25rem 1rem;
-  cursor: default;
+  cursor: pointer;
   transition: transform .2s cubic-bezier(.34,1.56,.64,1),
               box-shadow .2s ease,
               border-color .2s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
+
+.od-stat::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
+              rgba(59, 130, 246, 0.12) 0%, 
+              transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.od-stat:hover::before {
+  opacity: 1;
+}
+
 .od-stat:hover {
   transform: translateY(-4px) scale(1.01);
   border-color: var(--border-mid);
 }
+
 .od-stat.blue:hover  { box-shadow: 0 12px 32px rgba(59,130,246,.15); }
 .od-stat.gold:hover  { box-shadow: 0 12px 32px rgba(245,158,11,.12); }
 .od-stat.teal:hover  { box-shadow: 0 12px 32px rgba(45,212,191,.12); }
 .od-stat.green:hover { box-shadow: 0 12px 32px rgba(52,211,153,.12); }
 
 /* Corner orb */
-.od-stat::before {
+.od-stat .corner-orb {
   content: ''; position: absolute;
   top: -30px; right: -30px;
   width: 90px; height: 90px;
@@ -203,11 +277,11 @@ html[data-theme="light"] .od-hero { background: #0B2545; border-color: rgba(59,1
   transition: opacity .2s;
   opacity: .06;
 }
-.od-stat.blue::before  { background: #60A5FA; }
-.od-stat.gold::before  { background: #F59E0B; }
-.od-stat.teal::before  { background: #2DD4BF; }
-.od-stat.green::before { background: #34D399; }
-.od-stat:hover::before { opacity: .13; }
+.od-stat.blue .corner-orb  { background: #60A5FA; }
+.od-stat.gold .corner-orb  { background: #F59E0B; }
+.od-stat.teal .corner-orb  { background: #2DD4BF; }
+.od-stat.green .corner-orb { background: #34D399; }
+.od-stat:hover .corner-orb { opacity: .13; }
 
 .od-stat-top {
   display: flex; align-items: flex-start;
@@ -267,13 +341,41 @@ html[data-theme="light"] .od-hero { background: #0B2545; border-color: rgba(59,1
 }
 @media(max-width:980px){ .od-main{grid-template-columns:1fr} }
 
-/* ── Table card ────────────────────────────────────────────── */
+/* ── Table card (with spotlight) ────────────────────────────── */
 .od-card {
   background: var(--bg-alt);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-style: preserve-3d;
+  will-change: transform;
+  position: relative;
 }
+
+.od-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
+              rgba(59, 130, 246, 0.08) 0%, 
+              transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+.od-card:hover::before {
+  opacity: 1;
+}
+
+.od-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
 .od-card-hd {
   display: flex; align-items: center; justify-content: space-between;
   padding: 1rem 1.35rem; border-bottom: 1px solid var(--border); gap: .75rem; flex-wrap: wrap;
@@ -349,7 +451,7 @@ html[data-theme="light"] .od-chip { background:var(--surface); }
 .od-empty h4 { font-size:.88rem; font-weight:600; color:var(--text); margin-bottom:.3rem; }
 .od-empty p  { font-size:.78rem; color:var(--muted); line-height:1.65; max-width:240px; margin:0 auto .85rem; }
 
-/* ── Sidebar ───────────────────────────────────────────────── */
+/* ── Sidebar (with spotlight) ───────────────────────────────── */
 .od-sidebar { display:flex; flex-direction:column; gap:1rem; }
 
 /* Quick actions */
@@ -363,10 +465,12 @@ html[data-theme="light"] .od-chip { background:var(--surface); }
 }
 .od-qa::before {
   content:''; position:absolute; inset:0;
-  background:linear-gradient(90deg, transparent, rgba(255,255,255,.03));
-  transform:translateX(-100%); transition:transform .3s ease;
+  background:radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
+              rgba(59,130,246,0.15) 0%, transparent 70%);
+  opacity:0; transition:opacity .3s ease;
+  pointer-events:none;
 }
-.od-qa:hover::before { transform:translateX(0); }
+.od-qa:hover::before { opacity:1; }
 .od-qa:hover {
   border-color:var(--border-mid); color:var(--text);
   transform:translateX(3px) scale(1.01); filter:none; text-decoration:none;
@@ -424,7 +528,6 @@ html[data-theme="light"] .od-feed-item:hover { background:var(--surface); }
 .od-feed-time { font-size:.68rem; color:var(--muted); margin-top:.15rem; }
 </style>
 
-<!-- ══════════════════ HERO ══════════════════════════════ -->
 <div class="od-hero od-animate">
   <div class="od-hero-mesh"></div>
   <div class="od-hero-grid"></div>
@@ -459,9 +562,9 @@ html[data-theme="light"] .od-feed-item:hover { background:var(--surface); }
   </div>
 </div>
 
-<!-- ══════════════════ STATS ═════════════════════════════ -->
 <div class="od-stats">
-  <div class="od-stat blue od-animate od-animate-d1">
+  <div class="od-stat blue od-animate od-animate-d1 hover-card" data-spotlight>
+    <div class="corner-orb"></div>
     <div class="od-stat-top">
       <div class="od-stat-icon"><i class="fa fa-file-lines"></i></div>
       <canvas class="od-spark" id="sp0" width="56" height="28"></canvas>
@@ -475,7 +578,8 @@ html[data-theme="light"] .od-feed-item:hover { background:var(--surface); }
     <div class="od-stat-stripe"></div>
   </div>
 
-  <div class="od-stat gold od-animate od-animate-d2">
+  <div class="od-stat gold od-animate od-animate-d2 hover-card" data-spotlight>
+    <div class="corner-orb"></div>
     <div class="od-stat-top">
       <div class="od-stat-icon"><i class="fa fa-clock"></i></div>
       <canvas class="od-spark" id="sp1" width="56" height="28"></canvas>
@@ -488,7 +592,8 @@ html[data-theme="light"] .od-feed-item:hover { background:var(--surface); }
     <div class="od-stat-stripe"></div>
   </div>
 
-  <div class="od-stat teal od-animate od-animate-d3">
+  <div class="od-stat teal od-animate od-animate-d3 hover-card" data-spotlight>
+    <div class="corner-orb"></div>
     <div class="od-stat-top">
       <div class="od-stat-icon"><i class="fa fa-rotate"></i></div>
       <canvas class="od-spark" id="sp2" width="56" height="28"></canvas>
@@ -501,7 +606,8 @@ html[data-theme="light"] .od-feed-item:hover { background:var(--surface); }
     <div class="od-stat-stripe"></div>
   </div>
 
-  <div class="od-stat green od-animate od-animate-d4">
+  <div class="od-stat green od-animate od-animate-d4 hover-card" data-spotlight>
+    <div class="corner-orb"></div>
     <div class="od-stat-top">
       <div class="od-stat-icon"><i class="fa fa-box-open"></i></div>
       <canvas class="od-spark" id="sp3" width="56" height="28"></canvas>
@@ -514,7 +620,8 @@ html[data-theme="light"] .od-feed-item:hover { background:var(--surface); }
     <div class="od-stat-stripe"></div>
   </div>
 
-  <div class="od-stat green od-animate od-animate-d5">
+  <div class="od-stat green od-animate od-animate-d5 hover-card" data-spotlight>
+    <div class="corner-orb"></div>
     <div class="od-stat-top">
       <div class="od-stat-icon"><i class="fa fa-circle-check"></i></div>
       <canvas class="od-spark" id="sp4" width="56" height="28"></canvas>
@@ -528,11 +635,10 @@ html[data-theme="light"] .od-feed-item:hover { background:var(--surface); }
   </div>
 </div>
 
-<!-- ══════════════════ MAIN GRID ════════════════════════ -->
 <div class="od-main">
 
   <!-- Table -->
-  <div class="od-card od-animate od-animate-d3">
+  <div class="od-card od-animate od-animate-d3 hover-card" data-spotlight>
     <div class="od-card-hd">
       <div class="od-card-title">
         <i class="fa fa-clock-rotate-left"></i> Recent Applications
@@ -561,7 +667,7 @@ html[data-theme="light"] .od-feed-item:hover { background:var(--surface); }
                 <i class="fa fa-plus"></i> Capture First Application
               </a>
             </div>
-          </td></tr>
+           </td></tr>
         <?php else: foreach ($recent as $idx => $a): ?>
           <tr style="animation:fadeUp .4s cubic-bezier(.22,1,.36,1) <?= $idx * 0.04 ?>s both">
             <td><a href="<?= APP_URL ?>/officer/manage_application.php?id=<?= $a['id'] ?>" class="od-app-num"><?= e($a['application_number']) ?></a></td>
@@ -582,22 +688,22 @@ html[data-theme="light"] .od-feed-item:hover { background:var(--surface); }
   <div class="od-sidebar">
 
     <!-- Quick actions -->
-    <div class="od-card od-animate od-animate-d4">
+    <div class="od-card od-animate od-animate-d4 hover-card" data-spotlight>
       <div class="od-card-hd">
         <div class="od-card-title"><i class="fa fa-bolt"></i> Quick Actions</div>
       </div>
       <div class="od-actions">
-        <a href="<?= APP_URL ?>/officer/new_application.php" class="od-qa p">
+        <a href="<?= APP_URL ?>/officer/new_application.php" class="od-qa p hover-card" data-spotlight>
           <div class="od-qa-ico"><i class="fa fa-file-circle-plus"></i></div>
           <span>Capture Application</span>
           <i class="fa fa-chevron-right od-qa-arr"></i>
         </a>
-        <a href="<?= APP_URL ?>/officer/releases.php" class="od-qa g">
+        <a href="<?= APP_URL ?>/officer/releases.php" class="od-qa g hover-card" data-spotlight>
           <div class="od-qa-ico"><i class="fa fa-box-open"></i></div>
           <span>Release Passport</span>
           <i class="fa fa-chevron-right od-qa-arr"></i>
         </a>
-        <a href="<?= APP_URL ?>/officer/applications.php" class="od-qa m">
+        <a href="<?= APP_URL ?>/officer/applications.php" class="od-qa m hover-card" data-spotlight>
           <div class="od-qa-ico"><i class="fa fa-list"></i></div>
           <span>All Applications</span>
           <i class="fa fa-chevron-right od-qa-arr"></i>
@@ -606,7 +712,7 @@ html[data-theme="light"] .od-feed-item:hover { background:var(--surface); }
     </div>
 
     <!-- Donut -->
-    <div class="od-card od-animate od-animate-d5">
+    <div class="od-card od-animate od-animate-d5 hover-card" data-spotlight>
       <div class="od-card-hd">
         <div class="od-card-title"><i class="fa fa-chart-pie"></i> Status Breakdown</div>
       </div>
@@ -628,7 +734,7 @@ html[data-theme="light"] .od-feed-item:hover { background:var(--surface); }
     </div>
 
     <!-- Completion bars -->
-    <div class="od-card od-animate od-animate-d6">
+    <div class="od-card od-animate od-animate-d6 hover-card" data-spotlight>
       <div class="od-card-hd">
         <div class="od-card-title"><i class="fa fa-chart-simple"></i> Workload</div>
         <span style="font-size:.8rem;font-weight:800;color:var(--success);"><?= $doneRatio ?>%</span>
@@ -657,7 +763,76 @@ html[data-theme="light"] .od-feed-item:hover { background:var(--surface); }
   </div>
 </div><!-- /od-main -->
 
-<!-- ══════════════════ SCRIPTS ═══════════════════════════ -->
+<script>
+(function() {
+  // Spotlight effect for all hover-card elements
+  const spotlightElements = document.querySelectorAll('.hover-card, [data-spotlight]');
+  
+  spotlightElements.forEach(el => {
+    // Create spotlight overlay if not exists
+    let spotlight = el.querySelector('.sc-spotlight');
+    if (!spotlight) {
+      spotlight = document.createElement('div');
+      spotlight.className = 'sc-spotlight';
+      el.style.position = 'relative';
+      el.style.overflow = 'hidden';
+      el.appendChild(spotlight);
+    }
+    
+    // Mouse move handler for spotlight
+    el.addEventListener('mousemove', function(e) {
+      const rect = this.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      
+      // Update CSS variables for the gradient
+      this.style.setProperty('--x', x + '%');
+      this.style.setProperty('--y', y + '%');
+      
+      // Update spotlight position
+      spotlight.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(59, 130, 246, 0.12) 0%, transparent 60%)`;
+      spotlight.style.opacity = '1';
+    });
+    
+    el.addEventListener('mouseleave', function() {
+      spotlight.style.opacity = '0';
+    });
+  });
+  
+  // Also add tilt effect to stat cards
+  const tiltCards = document.querySelectorAll('.od-stat');
+  tiltCards.forEach(card => {
+    let tiltX = 0, tiltY = 0;
+    let targetX = 0, targetY = 0;
+    
+    card.addEventListener('mousemove', function(e) {
+      const rect = this.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const deltaX = (e.clientX - centerX) / (rect.width / 2);
+      const deltaY = (e.clientY - centerY) / (rect.height / 2);
+      
+      targetX = -deltaY * 4;
+      targetY = deltaX * 4;
+      
+      requestAnimationFrame(() => {
+        tiltX += (targetX - tiltX) * 0.1;
+        tiltY += (targetY - tiltY) * 0.1;
+        this.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-4px)`;
+      });
+    });
+    
+    card.addEventListener('mouseleave', function() {
+      targetX = 0;
+      targetY = 0;
+      requestAnimationFrame(() => {
+        this.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+      });
+    });
+  });
+})();
+</script>
+
 <script>
 (function(){
   const raw = <?= json_encode($sparkline) ?>;
@@ -675,7 +850,6 @@ html[data-theme="light"] .od-feed-item:hover { background:var(--surface); }
     }));
     ctx.clearRect(0,0,W,H);
 
-    // smooth curve via bezier
     function smooth(p) {
       ctx.beginPath(); ctx.moveTo(p[0].x, p[0].y);
       for (let i=1;i<p.length-1;i++) {
@@ -685,7 +859,6 @@ html[data-theme="light"] .od-feed-item:hover { background:var(--surface); }
       ctx.lineTo(p[p.length-1].x,p[p.length-1].y);
     }
 
-    // area
     const g=ctx.createLinearGradient(0,0,0,H);
     g.addColorStop(0,color+'60'); g.addColorStop(1,color+'00');
     ctx.save();
@@ -693,11 +866,9 @@ html[data-theme="light"] .od-feed-item:hover { background:var(--surface); }
     ctx.lineTo(pts[pts.length-1].x,H); ctx.lineTo(pts[0].x,H); ctx.closePath();
     ctx.fillStyle=g; ctx.fill(); ctx.restore();
 
-    // line
     smooth(pts);
     ctx.strokeStyle=color; ctx.lineWidth=1.6; ctx.lineJoin='round'; ctx.stroke();
 
-    // last dot
     const lp=pts[pts.length-1];
     ctx.beginPath(); ctx.arc(lp.x,lp.y,2.5,0,Math.PI*2);
     ctx.fillStyle=color; ctx.fill();

@@ -1,176 +1,288 @@
-// ── Theme toggle ────────────────────────────────────────────
+// ─────────────────────────────────────────
+// THEME (runs immediately)
+// ─────────────────────────────────────────
 (function applyTheme() {
   const saved = localStorage.getItem('npats_theme');
-  if (saved === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
-  } else {
-    document.documentElement.removeAttribute('data-theme');
-  }
+  document.documentElement.toggleAttribute('data-theme', saved === 'light');
 })();
 
+// ─────────────────────────────────────────
+// MAIN INIT
+// ─────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  // ── Theme button
-  const themeBtn = document.getElementById('themeToggle');
-  if (themeBtn) {
-    themeBtn.addEventListener('click', () => {
-      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-      if (isLight) {
-        document.documentElement.removeAttribute('data-theme');
-        localStorage.setItem('npats_theme', 'dark');
-      } else {
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('npats_theme', 'light');
-      }
-    });
-  }
 
-  // ── Mobile nav
+  initThemeToggle();
+  initMobileNav();
+  initAlerts();
+  initModals();
+  initConfirmDialogs();
+  initPhotoPreview();
+  initPasswordToggles();
+  initFormValidation();
+  initTableSearch();
+  initPrint();
+  initCustomSelects();
+
+});
+
+// ─────────────────────────────────────────
+// THEME TOGGLE
+// ─────────────────────────────────────────
+function initThemeToggle() {
+  const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+
+  btn.addEventListener('click', () => {
+    const isLight = document.documentElement.hasAttribute('data-theme');
+    document.documentElement.toggleAttribute('data-theme', !isLight);
+    localStorage.setItem('npats_theme', isLight ? 'dark' : 'light');
+  });
+}
+
+// ─────────────────────────────────────────
+// MOBILE NAV
+// ─────────────────────────────────────────
+function initMobileNav() {
   const hamburger = document.getElementById('hamburger');
   const navLinks  = document.getElementById('navLinks');
-  if (hamburger && navLinks) {
-    hamburger.addEventListener('click', () => { 
-      navLinks.classList.toggle('open');
-    });
-    document.addEventListener('click', e => {
-      if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
-        navLinks.classList.remove('open');
-      }
-    });
-  }
+  if (!hamburger || !navLinks) return;
 
-  // ── Auto-dismiss alerts ──────────────────────────────────
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+
+  document.addEventListener('click', e => {
+    if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+      navLinks.classList.remove('open');
+    }
+  });
+}
+
+// ─────────────────────────────────────────
+// ALERTS
+// ─────────────────────────────────────────
+function initAlerts() {
   document.querySelectorAll('.alert').forEach(el => {
     setTimeout(() => {
-      el.style.transition = 'opacity .5s, transform .5s';
       el.style.opacity = '0';
       el.style.transform = 'translateY(-6px)';
       setTimeout(() => el.remove(), 500);
     }, 5000);
   });
+}
 
-  // ── Modal helpers ────────────────────────────────────────
+// ─────────────────────────────────────────
+// MODALS
+// ─────────────────────────────────────────
+function initModals() {
   document.querySelectorAll('[data-modal-open]').forEach(btn =>
-    btn.addEventListener('click', () => openModal(btn.dataset.modalOpen)));
+    btn.addEventListener('click', () => openModal(btn.dataset.modalOpen))
+  );
 
   document.querySelectorAll('[data-modal-close]').forEach(btn =>
-    btn.addEventListener('click', () => closeModal(btn.dataset.modalClose)));
+    btn.addEventListener('click', () => closeModal(btn.dataset.modalClose))
+  );
 
   document.querySelectorAll('.modal-overlay').forEach(overlay =>
     overlay.addEventListener('click', e => {
       if (e.target === overlay) overlay.classList.remove('open');
-    }));
+    })
+  );
+}
 
-  // ── Confirm dialogs ──────────────────────────────────────
+// ─────────────────────────────────────────
+// CONFIRM DIALOGS
+// ─────────────────────────────────────────
+function initConfirmDialogs() {
   document.querySelectorAll('[data-confirm]').forEach(el =>
     el.addEventListener('click', e => {
       if (!confirm(el.dataset.confirm)) e.preventDefault();
-    }));
+    })
+  );
+}
 
-  // ── Photo preview ─────────────────────────────────────────
-  const photoInput   = document.getElementById('photo_upload');
-  const photoPreview = document.getElementById('photo_preview');
-  const photoPH      = document.getElementById('photo_placeholder');
-  if (photoInput && photoPreview) {
-    photoInput.addEventListener('change', () => {
-      const file = photoInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = e => {
-          photoPreview.src = e.target.result;
-          photoPreview.style.display = 'block';
-          if (photoPH) photoPH.style.display = 'none';
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-  }
+// ─────────────────────────────────────────
+// PHOTO PREVIEW
+// ─────────────────────────────────────────
+function initPhotoPreview() {
+  const input = document.getElementById('photo_upload');
+  const preview = document.getElementById('photo_preview');
+  const placeholder = document.getElementById('photo_placeholder');
 
-  // ── Password eye toggles ──────────────────────────────────
+  if (!input || !preview) return;
+
+  input.addEventListener('change', () => {
+    const file = input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = e => {
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+      if (placeholder) placeholder.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// ─────────────────────────────────────────
+// PASSWORD TOGGLE
+// ─────────────────────────────────────────
+function initPasswordToggles() {
   document.querySelectorAll('.eye-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const input = btn.closest('.input-wrap')?.querySelector('input');
       const icon  = btn.querySelector('i');
       if (!input) return;
-      if (input.type === 'password') {
-        input.type = 'text';
-        if (icon) icon.className = 'fa fa-eye-slash';
-      } else {
-        input.type = 'password';
-        if (icon) icon.className = 'fa fa-eye';
+
+      const isHidden = input.type === 'password';
+      input.type = isHidden ? 'text' : 'password';
+      if (icon) icon.className = isHidden ? 'fa fa-eye-slash' : 'fa fa-eye';
+    });
+  });
+}
+
+// ─────────────────────────────────────────
+// FORM VALIDATION
+// ─────────────────────────────────────────
+function initFormValidation() {
+  const form = document.getElementById('applicationForm');
+  if (!form) return;
+
+  form.addEventListener('submit', e => {
+    let valid = true;
+
+    form.querySelectorAll('[required]').forEach(field => {
+      const err = document.getElementById(field.id + '_err');
+      if (!field.value.trim()) {
+        field.classList.add('error');
+        if (err) { err.textContent = 'This field is required.'; err.classList.add('show'); }
+        valid = false;
+      }
+    });
+
+    const email = document.getElementById('email');
+    if (email?.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+      setError(email, 'Enter a valid email address.');
+      valid = false;
+    }
+
+    const phone = document.getElementById('phone');
+    if (phone?.value && !/^[+\d\s\-()]{7,20}$/.test(phone.value)) {
+      setError(phone, 'Enter a valid phone number.');
+      valid = false;
+    }
+
+    const dob = document.getElementById('date_of_birth');
+    if (dob?.value && new Date(dob.value) >= new Date()) {
+      setError(dob, 'Date of birth must be in the past.');
+      valid = false;
+    }
+
+    if (!valid) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  form.querySelectorAll('input, select, textarea').forEach(field => {
+    field.addEventListener('input', () => {
+      field.classList.remove('error');
+      const err = document.getElementById(field.id + '_err');
+      if (err) err.classList.remove('show');
+    });
+  });
+}
+
+function setError(field, message) {
+  field.classList.add('error');
+  const err = document.getElementById(field.id + '_err');
+  if (err) {
+    err.textContent = message;
+    err.classList.add('show');
+  }
+}
+
+// ─────────────────────────────────────────
+// TABLE SEARCH
+// ─────────────────────────────────────────
+function initTableSearch() {
+  const search = document.getElementById('tableSearch');
+  if (!search) return;
+
+  search.addEventListener('input', () => {
+    const q = search.value.toLowerCase();
+    document.querySelectorAll('tbody tr:not(.no-data)').forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  });
+}
+
+// ─────────────────────────────────────────
+// PRINT
+// ─────────────────────────────────────────
+function initPrint() {
+  document.querySelectorAll('[data-print]').forEach(btn =>
+    btn.addEventListener('click', () => window.print())
+  );
+}
+
+// ─────────────────────────────────────────
+// CUSTOM SELECT (SINGLE SOURCE OF TRUTH)
+// ─────────────────────────────────────────
+function initCustomSelects() {
+  document.querySelectorAll('.select-custom').forEach(select => {
+    const display  = select.querySelector('.select-display');
+    const dropdown = select.querySelector('.select-dropdown');
+    const input    = select.querySelector('input[type="hidden"]');
+
+    if (!display || !dropdown || !input) return;
+
+    display.addEventListener('click', () => {
+      dropdown.classList.toggle('open');
+    });
+
+    dropdown.querySelectorAll('[data-value]').forEach(option => {
+      option.addEventListener('click', () => {
+        display.textContent = option.textContent;
+        input.value = option.dataset.value;
+        dropdown.classList.remove('open');
+      });
+    });
+
+    document.addEventListener('click', e => {
+      if (!select.contains(e.target)) {
+        dropdown.classList.remove('open');
       }
     });
   });
+}
 
-  // ── Application form validation ───────────────────────────
-  const appForm = document.getElementById('applicationForm');
-  if (appForm) {
-    appForm.addEventListener('submit', e => {
-      let valid = true;
+// ─────────────────────────────────────────
+// MODAL HELPERS (GLOBAL)
+// ─────────────────────────────────────────
+function openModal(id)  {
+  document.getElementById(id)?.classList.add('open');
+}
 
-      appForm.querySelectorAll('[required]').forEach(field => {
-        const err = document.getElementById(field.id + '_err');
-        if (!field.value.trim()) {
-          field.classList.add('error');
-          if (err) { err.textContent = 'This field is required.'; err.classList.add('show'); }
-          valid = false;
-        } else {
-          field.classList.remove('error');
-          if (err) err.classList.remove('show');
-        }
-      });
+function closeModal(id) {
+  document.getElementById(id)?.classList.remove('open');
+}
 
-      const emailField = document.getElementById('email');
-      if (emailField?.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value)) {
-        emailField.classList.add('error');
-        const err = document.getElementById('email_err');
-        if (err) { err.textContent = 'Enter a valid email address.'; err.classList.add('show'); }
-        valid = false;
-      }
+// ─────────────────────────────────────────
+// STAGE MODAL (UPDATED FOR CUSTOM SELECT)
+// ─────────────────────────────────────────
+function openStageModal(stageName, currentStatus, comments) {
+  document.getElementById('modalStageName').value = stageName;
+  document.getElementById('modalStageLabel').textContent = stageName;
 
-      const phoneField = document.getElementById('phone');
-      if (phoneField?.value && !/^[+\d\s\-()]{7,20}$/.test(phoneField.value)) {
-        phoneField.classList.add('error');
-        const err = document.getElementById('phone_err');
-        if (err) { err.textContent = 'Enter a valid phone number.'; err.classList.add('show'); }
-        valid = false;
-      }
+  const input = document.getElementById('modalStageStatus');
+  const display = document.querySelector('#stageStatusSelect .select-display');
 
-      const dobField = document.getElementById('date_of_birth');
-      if (dobField?.value && new Date(dobField.value) >= new Date()) {
-        dobField.classList.add('error');
-        const err = document.getElementById('date_of_birth_err');
-        if (err) { err.textContent = 'Date of birth must be in the past.'; err.classList.add('show'); }
-        valid = false;
-      }
+  if (input) input.value = currentStatus;
+  if (display) display.textContent = currentStatus;
 
-      if (!valid) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    });
+  document.getElementById('modalComments').value = comments;
 
-    appForm.querySelectorAll('input, select, textarea').forEach(field => {
-      field.addEventListener('input', () => {
-        field.classList.remove('error');
-        const err = document.getElementById(field.id + '_err');
-        if (err) err.classList.remove('show');
-      });
-    });
-  }
-
-  // ── Dynamic table search ──────────────────────────────────
-  const tableSearch = document.getElementById('tableSearch');
-  if (tableSearch) {
-    tableSearch.addEventListener('input', () => {
-      const q = tableSearch.value.toLowerCase();
-      document.querySelectorAll('tbody tr:not(.no-data)').forEach(row =>
-        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none');
-    });
-  }
-
-  // ── Print trigger ─────────────────────────────────────────
-  document.querySelectorAll('[data-print]').forEach(btn =>
-    btn.addEventListener('click', () => window.print()));
-
-});
-
-// Exposed globally for inline onclick handlers in PHP templates
-function openModal(id)  { document.getElementById(id)?.classList.add('open'); }
-function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
+  openModal('stageModal');
+}
