@@ -9,11 +9,12 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   overflow: hidden;
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Left panel (always dark/navy) ─────────────────────────── */
 .auth-panel {
-  background: #0B1525;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -163,7 +164,6 @@
 
 /* ── Right form panel (theme-aware) ────────────────────────── */
 .auth-form-panel {
-  background: var(--bg-alt);
   display: flex;
   align-items: center;
   justify-content: center;

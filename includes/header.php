@@ -48,6 +48,7 @@ $currentPath = $_SERVER['PHP_SELF'] ?? '';
 </script>
 
 <link rel="stylesheet" href="<?= APP_URL ?>/css/main.css">
+<link rel="stylesheet" href="<?= APP_URL ?>/css/partials/scene-bg.css">
 <link rel="icon" type="image/svg+xml" href="<?= APP_URL ?>/assets/headerIcon.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -81,7 +82,7 @@ $currentPath = $_SERVER['PHP_SELF'] ?? '';
 
     <!-- Theme toggle -->
     <li>
-      <button class="theme-toggle" id="themeToggle" title="Toggle light / dark theme" aria-label="Toggle theme">
+      <button class="theme-toggle" id="themeToggle" onclick="initThemeToggle()" title="Toggle light / dark theme" aria-label="Toggle theme">
         <i class="fa fa-sun icon-sun"></i>
         <i class="fa fa-moon icon-moon"></i>
       </button>

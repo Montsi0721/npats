@@ -1,0 +1,279 @@
+/* ============================================================
+   hero.css — Hero section (generic .hero + role-prefixed variants)
+   All role variants share the same structure; only the class
+   prefix differs so existing PHP templates need no changes.
+   ============================================================ */
+
+/* ── Container ─────────────────────────────────────────────── */
+.hero,
+.admin-hero,
+.applicant-hero,
+.od-hero,
+.track-hero,
+.rel-hero,
+.ma-hero {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  background: #060D1A;
+  border: 1px solid rgba(59,130,246,.18);
+  animation: fadeIn .6s ease both;
+}
+
+html[data-theme="light"] .hero,
+html[data-theme="light"] .admin-hero,
+html[data-theme="light"] .applicant-hero,
+html[data-theme="light"] .od-hero,
+html[data-theme="light"] .track-hero,
+html[data-theme="light"] .rel-hero,
+html[data-theme="light"] .ma-hero {
+  background: #0B2545;
+  border-color: rgba(59,130,246,.3);
+}
+
+/* ── Mesh background ───────────────────────────────────────── */
+.hero-mesh,
+.admin-hero-mesh, .applicant-hero-mesh, .od-hero-mesh,
+.track-hero-mesh, .rel-hero-mesh, .ma-hero-mesh {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 80% at 0%   50%, rgba(29,78,216,.22)  0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 100% 20%, rgba(200,145,26,.12) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 70% at 60%  100%,rgba(13,148,136,.10) 0%, transparent 55%);
+}
+
+/* ── Grid overlay ──────────────────────────────────────────── */
+.hero-grid,
+.admin-hero-grid, .applicant-hero-grid, .od-hero-grid,
+.track-hero-grid, .rel-hero-grid, .ma-hero-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,.4) 30%, rgba(0,0,0,.4) 70%, transparent);
+}
+
+/* ── Gold shimmer top border ───────────────────────────────── */
+.hero::before,
+.admin-hero::before, .applicant-hero::before, .od-hero::before,
+.track-hero::before, .rel-hero::before, .ma-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  z-index: 3;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gold-light) 30%,
+    #fff9 50%,
+    var(--gold-light) 70%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ── Inner layout ──────────────────────────────────────────── */
+.hero-inner,
+.admin-hero-inner, .applicant-hero-inner, .od-hero-inner,
+.track-hero-inner, .rel-hero-inner, .ma-hero-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  padding: 1.75rem 2rem;
+}
+
+.hero-left,
+.admin-hero-left, .applicant-hero-left, .od-hero-left,
+.track-hero-left, .rel-hero-left, .ma-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.hero-right,
+.admin-hero-right, .applicant-hero-right, .od-hero-right,
+.track-hero-right, .rel-hero-right, .ma-hero-right {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+
+/* ── Icon ──────────────────────────────────────────────────── */
+.hero-icon,
+.admin-hero-icon, .applicant-hero-icon, .od-hero-icon,
+.track-hero-icon, .rel-hero-icon, .ma-hero-icon {
+  position: relative;
+  width: 60px; height: 60px;
+  border-radius: 16px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(59,130,246,.25), rgba(59,130,246,.08));
+  border: 1px solid rgba(59,130,246,.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; color: #93C5FD;
+  box-shadow: 0 0 30px rgba(59,130,246,.2), inset 0 1px 0 rgba(255,255,255,.08);
+  animation: float 4s ease-in-out infinite;
+}
+
+.hero-icon::after,
+.admin-hero-icon::after, .applicant-hero-icon::after, .od-hero-icon::after,
+.track-hero-icon::after, .rel-hero-icon::after, .ma-hero-icon::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 17px;
+  background: linear-gradient(135deg, rgba(59,130,246,.4), transparent 60%);
+  opacity: .5;
+  pointer-events: none;
+}
+
+/* ── Typography ────────────────────────────────────────────── */
+.hero-eyebrow,
+.admin-hero-eyebrow, .applicant-hero-eyebrow, .od-hero-eyebrow,
+.track-hero-eyebrow, .rel-hero-eyebrow, .ma-hero-eyebrow {
+  font-size: .67rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+  margin-bottom: .25rem;
+  display: flex; align-items: center; gap: .5rem;
+}
+
+.hero-eyebrow::before,
+.admin-hero-eyebrow::before, .applicant-hero-eyebrow::before, .od-hero-eyebrow::before,
+.track-hero-eyebrow::before, .rel-hero-eyebrow::before, .ma-hero-eyebrow::before {
+  content: '';
+  width: 18px; height: 1.5px;
+  background: var(--gold-light);
+  border-radius: 2px;
+  display: block;
+}
+
+.hero-name,
+.admin-hero-name, .applicant-hero-name, .od-hero-name,
+.track-hero-name, .rel-hero-name, .ma-hero-name {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -.03em;
+  line-height: 1.15;
+}
+
+/* ── Meta chips ────────────────────────────────────────────── */
+.hero-meta,
+.admin-hero-meta, .applicant-hero-meta, .od-hero-meta,
+.track-hero-meta, .rel-hero-meta, .ma-hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: .45rem;
+  flex-wrap: wrap;
+}
+
+.hero-meta-chip,
+.admin-hero-meta-chip, .applicant-hero-meta-chip, .od-hero-meta-chip,
+.track-hero-meta-chip, .rel-hero-meta-chip, .ma-hero-meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .73rem;
+  color: rgba(255,255,255,.4);
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 20px;
+  padding: .2rem .65rem;
+}
+
+.hero-meta-chip i,
+.admin-hero-meta-chip i, .applicant-hero-meta-chip i, .od-hero-meta-chip i,
+.track-hero-meta-chip i, .rel-hero-meta-chip i, .ma-hero-meta-chip i {
+  font-size: .62rem;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* Tighten inner padding */
+  .hero-inner,
+  .admin-hero-inner, .applicant-hero-inner, .od-hero-inner,
+  .track-hero-inner, .rel-hero-inner, .ma-hero-inner {
+    padding: 1.25rem 1.25rem;
+    gap: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Left: keep icon + text in a row but allow it to go full-width */
+  .hero-left,
+  .admin-hero-left, .applicant-hero-left, .od-hero-left,
+  .track-hero-left, .rel-hero-left, .ma-hero-left {
+    width: 100%;
+    gap: .9rem;
+  }
+
+  /* Shrink icon slightly */
+  .hero-icon,
+  .admin-hero-icon, .applicant-hero-icon, .od-hero-icon,
+  .track-hero-icon, .rel-hero-icon, .ma-hero-icon {
+    width: 48px; height: 48px;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  /* Scale down heading */
+  .hero-name,
+  .admin-hero-name, .applicant-hero-name, .od-hero-name,
+  .track-hero-name, .rel-hero-name, .ma-hero-name {
+    font-size: 1.15rem;
+  }
+
+  /* Let meta chips wrap tightly */
+  .hero-meta,
+  .admin-hero-meta, .applicant-hero-meta, .od-hero-meta,
+  .track-hero-meta, .rel-hero-meta, .ma-hero-meta {
+    gap: .4rem;
+    margin-top: .35rem;
+  }
+
+  /* Right: full width, wrap buttons */
+  .hero-right,
+  .admin-hero-right, .applicant-hero-right, .od-hero-right,
+  .track-hero-right, .rel-hero-right, .ma-hero-right {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: .5rem;
+  }
+
+  /* Buttons stretch to fill on very small screens */
+  @media (max-width: 480px) {
+    .hero-right .btn,
+    .admin-hero-right .btn, .applicant-hero-right .btn, .od-hero-right .btn,
+    .track-hero-right .btn, .rel-hero-right .btn, .ma-hero-right .btn {
+      flex: 1 1 auto;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    /* Hide the date/time chips on very small screens to save space */
+    .hero-meta-chip:not(:last-child),
+    .admin-hero-meta-chip:not(:last-child), .applicant-hero-meta-chip:not(:last-child),
+    .od-hero-meta-chip:not(:last-child), .track-hero-meta-chip:not(:last-child),
+    .rel-hero-meta-chip:not(:last-child), .ma-hero-meta-chip:not(:last-child) {
+      display: none;
+    }
+  }
+}

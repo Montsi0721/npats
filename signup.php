@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <title>Create Account — NPATS</title>
 <script>(function(){var t=localStorage.getItem('npats_theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');}else{document.documentElement.removeAttribute('data-theme');}})()</script>
 <link rel="stylesheet" href="<?= APP_URL ?>/css/main.css">
+<link rel="stylesheet" href="<?= APP_URL ?>/css/scene-bg.css">
 <link rel="icon" type="image/svg+xml" href="<?= APP_URL ?>/assets/headerIcon.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -124,21 +125,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem;">
           <div class="form-group">
             <label for="full_name">Full Name *</label>
+            <div class="input-wrap">
             <input type="text" id="full_name" name="full_name" required
                    value="<?= e($data['full_name']??'') ?>" placeholder="Your full name"
                    class="<?= isset($errors['full_name'])?'error':'' ?>">
             <?php if (isset($errors['full_name'])): ?>
             <span class="field-error show"><?= e($errors['full_name']) ?></span>
             <?php endif; ?>
+            </div>
           </div>
           <div class="form-group">
             <label for="username">Username *</label>
+            <div class="input-wrap">
             <input type="text" id="username" name="username" required
                    value="<?= e($data['username']??'') ?>" placeholder="Letters, numbers, _"
                    class="<?= isset($errors['username'])?'error':'' ?>">
             <?php if (isset($errors['username'])): ?>
             <span class="field-error show"><?= e($errors['username']) ?></span>
             <?php endif; ?>
+            </div>
           </div>
         </div>
 
@@ -213,6 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 </div>
 <script src="<?= APP_URL ?>/js/main.js"></script>
+<script src="<?= APP_URL ?>/js/scene-bg.js"></script>
 <script>
 const pwdInput     = document.getElementById('password');
 const strengthFill = document.getElementById('strengthFill');

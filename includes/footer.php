@@ -6,5 +6,6 @@
 </footer>
 
 <script src="<?= APP_URL ?>/js/main.js"></script>
+<script src="<?= APP_URL ?>/js/scene-bg.js"></script>
 </body>
 </html>

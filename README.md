@@ -60,57 +60,67 @@ The system is built to run on **XAMPP (Apache + MySQL + PHP)** at `http://localh
 ## Project Structure
 
 ```
-npats/
-├── index.php                   # Login page
-├── signup.php                  # Registration page
-├── logout.php                  # Session termination
-├── unauthorized.php            # Access denied page
-├── public_track.php            # Public application tracker (no login)
-├── notifications.php           # User notifications
-├── npats.sql                   # Database schema + seed data
-│
-├── css/
-│   └── main.css               # Complete design system
-|      partials/
-│      ├── auth.css  
-│      ├── base.css
-│      ├── components.css
-│      ├── forms.css
-│      ├── layout.css
-|      ├── navbar.css
-│      ├── utilities.css
-│      └── varebles.css
-│
-├── js/
-│   └── main.js                 # Client-side logic
-│
-├── includes/
-│   ├── config.php              # DB connection, session, helpers
-│   ├── header.php              # Role-aware navbar
-│   └── footer.php              # Footer + JS include
-│
-├── assets/
-│   └── photos/                 # Uploaded applicant photos
-│
+/npats/
+├── README.md
 ├── admin/
-│   ├── dashboard.php           # Admin overview + stats
-│   ├── users.php               # Create, activate/deactivate, reset users
-│   ├── applications.php        # Browse & filter all applications
-│   ├── view_application.php    # Read-only application detail
-│   ├── reports.php             # Date-range reports by status/type/officer
-│   └── activity.php           # Audit log with pagination
-│
+│   ├── activity.php
+│   ├── applications.php
+│   ├── create_admin.php
+│   ├── create_officer.php
+│   ├── dashboard.php
+│   ├── reports.php
+│   ├── users.php
+│   └── view_application.php
+├── applicant/
+│   ├── create_application.php
+│   ├── dashboard.php
+│   ├── my_applications.php
+│   └── track.php
+├── assets/
+│   ├── headerIcon.png
+│   └── photos/
+├── css/
+│   ├── main.css
+│   └── partials/
+│       ├── admin.css
+│       ├── animations.css
+│       ├── applicant.css
+│       ├── auth.css
+│       ├── base.css
+│       ├── buttons.css
+│       ├── cards.css
+│       ├── components.css
+│       ├── dashboard.css
+│       ├── forms.css
+│       ├── hero.css
+│       ├── landing.css
+│       ├── layout.css
+│       ├── navbar.css
+│       ├── notifications.css
+│       ├── officer.css
+│       ├── spotlight.css
+│       └── utilities.css
+├── includes/
+│   ├── config.php
+│   ├── footer.php
+│   └── header.php
+├── index.html
+├── js/
+│   ├── dashboard.js
+│   ├── landing.js
+│   └── main.js
+├── login.php
+├── logout.php
+├── notifications.php
+├── npats.sql
 ├── officer/
-│   ├── dashboard.php           # Officer overview + quick actions
-│   ├── new_application.php     # Capture new application with validation
-│   ├── applications.php        # Officer's application list
-│   ├── manage_application.php  # Update processing stages
-│   └── releases.php            # Release passports & record collection
-│
-└── applicant/
-    ├── dashboard.php           # Applicant overview + progress tracker
-    ├── track.php               # Track by application number
-    └── my_applications.php     # List of applicant's applications
+│   ├── applications.php
+│   ├── dashboard.php
+│   ├── manage_application.php
+│   ├── new_application.php
+│   └── releases.php
+├── signup.php
+└── unauthorized.php
 ```
 
 ---

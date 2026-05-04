@@ -1,0 +1,104 @@
+/* ============================================================
+   buttons.css — All button variants
+   ============================================================ */
+
+/* ── Base shared styles ────────────────────────────────────── */
+.btn,
+.btn-primary,
+.btn-gold,
+.btn-outline,
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .6rem 1.2rem;
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: .9rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all .2s;
+  border: none;
+}
+
+/* ── Variants ──────────────────────────────────────────────── */
+.btn-primary {
+  background: linear-gradient(135deg, #1D5A9E, #3B82F6);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59,130,246,.3);
+  filter: none;
+  color: #fff;
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #B45309, #F59E0B);
+  color: #fff;
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245,158,11,.3);
+  filter: none;
+  color: #fff;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text-soft);
+  font-weight: 500;
+}
+
+.btn-outline:hover {
+  border-color: var(--navy-light);
+  color: var(--navy-light);
+  transform: translateY(-1px);
+  filter: none;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1.5px solid transparent;
+  color: var(--text-soft);
+  font-weight: 500;
+}
+
+.btn-ghost:hover {
+  background: rgba(59,130,246,.08);
+  color: var(--navy-light);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #065F46, #34D399);
+  border: none;
+  color: #fff;
+  padding: .6rem 1.2rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  transition: all .2s;
+}
+
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52,211,153,.3);
+}
+
+/* ── Sizes ─────────────────────────────────────────────────── */
+.btn-sm  { padding: .4rem .8rem;  font-size: .75rem; }
+.btn-lg  { padding: .8rem 1.5rem; font-size: .9rem;  }
+
+/* ── Button group ──────────────────────────────────────────── */
+.btn-group {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+}

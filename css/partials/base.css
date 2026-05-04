@@ -1,5 +1,108 @@
 /* ============================================================
-   base.css — Reset, root element styles, global typography
+   Dark theme is the default (:root).
+   Light theme activates when <html data-theme="light">.
+   ============================================================ */
+
+/* ── Brand & layout constants (theme-invariant) ────────────── */
+:root {
+  --gold:       #C8911A;
+  --gold-light: #E8B040;
+  --gold-pale:  #2A1F05;
+
+  --nav-h:      64px;
+  --radius-sm:  6px;
+  --radius:     10px;
+  --radius-lg:  16px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   DARK THEME (default)
+   ══════════════════════════════════════════════════════════ */
+:root {
+  --bg:          #0D11179a;
+  --bg-alt:      #161b229a;
+  --surface:     #1c23339a;
+  --surface-alt: #21293A9a;
+  --border:      #2D3748;
+  --border-mid:  #3D4E66;
+
+  --text:        #E2E8F4;
+  --text-soft:   #A0AABE;
+  --muted:       #667085;
+
+  --white:       #1C2333;
+  --off-white:   #0D1117;
+
+  --navy:        #0D1117;
+  --navy-mid:    #131A26;
+  --navy-light:  #3B82F6;
+
+  --success:     #34D399;
+  --success-bg:  #0A2E1F;
+  --danger:      #F87171;
+  --danger-bg:   #2D0F0F;
+  --warning:     #FBBF24;
+  --warning-bg:  #2A1A00;
+  --info:        #60A5FA;
+  --info-bg:     #0D1F3C;
+
+  --shadow-sm:   0 1px 4px rgba(0,0,0,.4);
+  --shadow:      0 2px 12px rgba(0,0,0,.5);
+  --shadow-lg:   0 8px 32px rgba(0,0,0,.6);
+
+  /* Navbar stays dark in both themes */
+  --nav-bg:          #0B1120;
+  --nav-border:      rgba(255,255,255,.06);
+  --nav-text:        rgba(255,255,255,.6);
+  --nav-text-hover:  #ffffff;
+  --nav-item-hover:  rgba(255,255,255,.09);
+}
+
+/* ══════════════════════════════════════════════════════════
+   LIGHT THEME
+   ══════════════════════════════════════════════════════════ */
+html[data-theme="light"] {
+  --bg:          #F7F8FC;
+  --bg-alt:      #FFFFFF;
+  --surface:     #EEF1F8;
+  --surface-alt: #E5EAF4;
+  --border:      #DDE2EF;
+  --border-mid:  #C5CCDE;
+
+  --text:        #1A2238;
+  --text-soft:   #3D4C6B;
+  --muted:       #6B7898;
+
+  --white:       #FFFFFF;
+  --off-white:   #F7F8FC;
+
+  --navy:        #0B2545;
+  --navy-mid:    #133A6E;
+  --navy-light:  #1D5A9E;
+
+  --success:     #0F7A4B;
+  --success-bg:  #E6F5EE;
+  --danger:      #B92C2C;
+  --danger-bg:   #FBEAEA;
+  --warning:     #966200;
+  --warning-bg:  #FEF7E6;
+  --info:        #0A5A9E;
+  --info-bg:     #E6F0FB;
+  --gold-pale:   #FDF3E0;
+
+  --shadow-sm:   0 1px 4px rgba(11,37,69,.07);
+  --shadow:      0 2px 12px rgba(11,37,69,.10);
+  --shadow-lg:   0 8px 32px rgba(11,37,69,.14);
+
+  --nav-bg:          #0B2545;
+  --nav-border:      rgba(255,255,255,.07);
+  --nav-text:        rgba(255,255,255,.6);
+  --nav-text-hover:  #ffffff;
+  --nav-item-hover:  rgba(255,255,255,.1);
+}
+
+/* ============================================================
+   base.css — Reset, global typography, scrollbars, transitions
    ============================================================ */
 
 *,
@@ -13,7 +116,6 @@
 html {
   font-size: 15px;
   scroll-behavior: smooth;
-  /* Prevent flash of wrong theme before JS runs */
   color-scheme: dark;
 }
 
@@ -30,21 +132,18 @@ body {
   flex-direction: column;
   line-height: 1.6;
   transition: background .25s, color .25s;
+  position: relative;
 }
 
 a {
   color: var(--navy-light);
   text-decoration: none;
 }
-a:hover {
-  filter: brightness(1.2);
-}
+a:hover { filter: brightness(1.2); }
 
-img {
-  max-width: 100%;
-}
+img { max-width: 100%; }
 
-/* Smooth theme transitions on key properties */
+/* Smooth theme transitions */
 *,
 *::before,
 *::after {
@@ -55,7 +154,7 @@ img {
     box-shadow .2s ease;
 }
 
-/* Opt out specific things from transition (avoid jank on hover) */
+/* Opt out specific elements (prevent jank on hover/transform) */
 .btn,
 a,
 input,
@@ -72,42 +171,17 @@ textarea,
     opacity .15s ease;
 }
 
-/* ============================================================
-   PREMIUM SCROLLBAR STYLING — Dark & Light Theme Support
-   ============================================================ */
+/* ── Scrollbars ────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--surface); border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--navy-light); }
+::-webkit-scrollbar-thumb:active { background: var(--gold-light); }
+::-webkit-scrollbar-corner { background: var(--surface); }
 
-/* Webkit browsers (Chrome, Edge, Safari) */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+* { scrollbar-width: thin; scrollbar-color: var(--border-mid) var(--surface); }
 
-::-webkit-scrollbar-track {
-  background: var(--surface);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border-mid);
-  border-radius: 10px;
-  transition: background .2s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--navy-light);
-}
-
-::-webkit-scrollbar-corner {
-  background: var(--surface);
-}
-
-/* Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-mid) var(--surface);
-}
-
-/* Custom scrollbar for specific elements with overflow */
+/* Narrower scrollbars on overflow containers */
 .modal-body,
 .table-wrapper,
 .custom-select-dropdown,
@@ -152,65 +226,83 @@ textarea,
   background: var(--gold-light);
 }
 
-/* Hide scrollbar when not needed on certain elements (optional) */
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+/* Light theme scrollbar overrides */
+html[data-theme="light"] ::-webkit-scrollbar-track { background: #E5E7EB; }
+html[data-theme="light"] ::-webkit-scrollbar-thumb { background: #9CA3AF; }
+html[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: #6B7280; }
+html[data-theme="light"] * { scrollbar-color: #9CA3AF #E5E7EB; }
 
-/* Smooth scrolling for the entire page */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Custom scrollbar for code/monospace blocks */
-code,
-pre,
-.monospace {
-  scrollbar-width: thin;
-  scrollbar-color: var(--gold-light) var(--surface);
-}
-
-code::-webkit-scrollbar,
-pre::-webkit-scrollbar,
-.monospace::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-code::-webkit-scrollbar-thumb,
-pre::-webkit-scrollbar-thumb,
-.monospace::-webkit-scrollbar-thumb {
+/* Code/monospace scrollbars */
+code, pre, .monospace { scrollbar-width: thin; scrollbar-color: var(--gold-light) var(--surface); }
+code::-webkit-scrollbar, pre::-webkit-scrollbar, .monospace::-webkit-scrollbar { width: 6px; height: 6px; }
+code::-webkit-scrollbar-thumb, pre::-webkit-scrollbar-thumb, .monospace::-webkit-scrollbar-thumb {
   background: var(--gold-light);
   border-radius: 10px;
 }
 
-/* Active scrollbar state when clicking/dragging */
-::-webkit-scrollbar-thumb:active {
-  background: var(--gold-light);
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+/* ============================================================
+   scene-bg.js integration — stacking context
+   Canvas is z-index 0 (fixed, behind everything).
+   All interactive layers must be z-index >= 1.
+   ============================================================ */
+
+/* Ensure the canvas doesn't compete with page chrome */
+#scene-bg-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Light theme specific scrollbar adjustments */
-html[data-theme="light"] ::-webkit-scrollbar-track {
-  background: #E5E7EB;
+/* Every direct child of body that isn't the canvas floats above */
+body > *:not(#scene-bg-canvas) {
+  position: relative;
+  z-index: 1;
 }
 
-html[data-theme="light"] ::-webkit-scrollbar-thumb {
-  background: #9CA3AF;
+/* Navbar must stay above everything including modals */
+.navbar { z-index: 900 !important; }
+
+/* Modals already use 10000 — keep it */
+.modal-overlay { z-index: 10000 !important; }
+
+/* Dropdowns / selects above cards */
+.custom-select-dropdown,
+.select-dropdown,
+.date-dropdown {
+  z-index: 200 !important;
 }
 
-html[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
-  background: #6B7280;
+/* Auth page: both panels above canvas */
+.auth-page,
+.auth-panel,
+.auth-form-panel {
+  position: relative;
+  z-index: 1;
 }
 
-html[data-theme="light"] * {
-  scrollbar-color: #9CA3AF #E5E7EB;
+/* ── Background-transparent body on pages that use the canvas ─
+   The canvas provides the background; --bg becomes the page
+   card background, not the full-page fill.                    */
+
+/* Dark theme: body bg becomes nearly transparent so canvas
+   star-field is visible between cards                         */
+:root {
+  --page-bg: #080E1A;  /* true full-page background colour    */
 }
 
-/* For dropdown menus that need higher z-index scrollbars */
-.custom-select-dropdown {
-  scrollbar-width: thin;
+html[data-theme="light"] {
+  --page-bg: #F0F3FA;
+}
+
+/* Override body background when scene-bg canvas is present */
+body:has(#scene-bg-canvas) {
+  background: var(--page-bg);
+}
+
+/* Fallback for browsers without :has() support */
+@supports not selector(:has(*)) {
+  body { background: var(--bg); }
 }

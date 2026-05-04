@@ -1,0 +1,67 @@
+/* ============================================================
+   applicant.css — Applicant-specific page styles
+   Covers: track application, my-applications table
+   ============================================================ */
+
+/* ── Application number display ────────────────────────────── */
+.app-number-label { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: .2rem; }
+.app-number-value { font-size: 1.2rem; font-weight: 700; color: var(--navy-light); font-family: monospace; letter-spacing: .5px; }
+
+/* ── Summary header ────────────────────────────────────────── */
+.summary-header {
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: .8rem;
+  margin-bottom: 1rem; padding-bottom: .8rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Stage date ────────────────────────────────────────────── */
+.stage-date {
+  font-size: .72rem; color: var(--muted);
+  display: flex; align-items: center; gap: .3rem; margin-top: .3rem;
+}
+
+.stage-date i { font-size: .6rem; }
+
+/* ── My-applications table ─────────────────────────────────── */
+.ma-table-wrapper { overflow-x: auto; }
+
+.ma-table { width: 100%; border-collapse: collapse; }
+.ma-table thead { background: #07101E; border-bottom: 1px solid var(--border); }
+html[data-theme="light"] .ma-table thead { background: var(--surface); }
+.ma-table thead th { padding: 1rem 1.2rem; text-align: left; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); white-space: nowrap; }
+.ma-table tbody tr { border-bottom: 1px solid var(--border); transition: background .12s; animation: fadeUp .4s cubic-bezier(.22,1,.36,1) both; animation-delay: calc(var(--i, 0) * .04s); }
+.ma-table tbody tr:hover { background: rgba(59,130,246,.04); }
+.ma-table tbody td { padding: 1rem 1.2rem; vertical-align: middle; font-size: .83rem; }
+
+/* ── Quick actions row (track page) ────────────────────────── */
+.track-quick-actions {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  margin-top: 1.2rem;
+}
+
+/* ── Stage count badge ─────────────────────────────────────── */
+.stage-count-badge {
+  font-size: .7rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: .2rem .6rem; border-radius: 20px;
+  color: var(--muted);
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .summary-header { flex-direction: column; align-items: flex-start; }
+
+  .ma-table thead th,
+  .ma-table tbody td { padding: .75rem; }
+
+  .track-quick-actions { flex-direction: column; }
+  .track-quick-actions .btn-outline,
+  .track-quick-actions .btn-primary { width: 100%; justify-content: center; }
+}
+
+@media print {
+  .no-print { display: none; }
+  body { background: white; }
+}

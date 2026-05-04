@@ -20,512 +20,26 @@ $pageTitle = 'Activity Log';
 include __DIR__ . '/../includes/header.php';
 ?>
 
-<style>
-/* ─────────────────────────────────────────────────────────────
-   ACTIVITY LOG PAGE — Premium Edition (Dashboard Matching)
-   ───────────────────────────────────────────────────────────── */
-
-/* ── Entry animations ──────────────────────────────────────── */
-@keyframes fadeUp   { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-@keyframes fadeIn   { from{opacity:0} to{opacity:1} }
-@keyframes shimmer  {
-  0%  { background-position: -200% center }
-  100%{ background-position:  200% center }
-}
-@keyframes float {
-  0%,100%{ transform:translateY(0) }
-  50%    { transform:translateY(-6px) }
-}
-@keyframes pulse-ring {
-  0%  { box-shadow: 0 0 0 0 rgba(59,130,246,.4) }
-  70% { box-shadow: 0 0 0 6px rgba(59,130,246,0) }
-  100%{ box-shadow: 0 0 0 0 rgba(59,130,246,0) }
-}
-
-.act-animate { animation: fadeUp .5s cubic-bezier(.22,1,.36,1) both }
-.act-animate-d1 { animation-delay:.06s }
-.act-animate-d2 { animation-delay:.12s }
-.act-animate-d3 { animation-delay:.18s }
-.act-animate-d4 { animation-delay:.24s }
-
-/* ── Spotlight Card Effect ───────────────────────────────── */
-.hover-card {
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
-  overflow: hidden;
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-
-.hover-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
-              rgba(59, 130, 246, 0.12) 0%, 
-              transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.hover-card:hover::before {
-  opacity: 1;
-}
-
-.hover-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(59, 130, 246, 0.3);
-}
-
-/* ── Hero Section ────────────────────────────────────────── */
-.act-hero {
-  position: relative;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  margin-bottom: 1.5rem;
-  background: #060D1A;
-  border: 1px solid rgba(59,130,246,.18);
-  animation: fadeIn .6s ease both;
-}
-html[data-theme="light"] .act-hero { background: #0B2545; border-color: rgba(59,130,246,.3); }
-
-.act-hero-mesh {
-  position: absolute; inset: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 60% 80% at 0% 50%, rgba(29,78,216,.22) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 60% at 100% 20%, rgba(200,145,26,.12) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 70% at 60% 100%, rgba(13,148,136,.10) 0%, transparent 55%);
-}
-
-.act-hero-grid {
-  position: absolute; inset: 0; pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,.4) 30%, rgba(0,0,0,.4) 70%, transparent);
-}
-
-.act-hero::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 3;
-  background: linear-gradient(90deg, transparent 0%, var(--gold-light) 30%, #fff9 50%, var(--gold-light) 70%, transparent 100%);
-  background-size: 200% 100%;
-  animation: shimmer 3s linear infinite;
-}
-
-.act-hero-inner {
-  position: relative; z-index: 2;
-  display: flex; align-items: center;
-  justify-content: space-between; flex-wrap: wrap;
-  gap: 1.2rem; padding: 1.75rem 2rem;
-}
-
-.act-hero-left { display: flex; align-items: center; gap: 1.25rem; }
-
-.act-hero-icon {
-  position: relative; width: 60px; height: 60px;
-  border-radius: 16px; flex-shrink: 0;
-  background: linear-gradient(135deg, rgba(59,130,246,.25), rgba(59,130,246,.08));
-  border: 1px solid rgba(59,130,246,.3);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem; color: #93C5FD;
-  box-shadow: 0 0 30px rgba(59,130,246,.2), inset 0 1px 0 rgba(255,255,255,.08);
-  animation: float 4s ease-in-out infinite;
-}
-.act-hero-icon::after {
-  content: '';
-  position: absolute; inset: -1px; border-radius: 17px;
-  background: linear-gradient(135deg, rgba(59,130,246,.4), transparent 60%);
-  opacity: .5; pointer-events: none;
-}
-
-.act-hero-eyebrow {
-  font-size: .67rem; font-weight: 700; letter-spacing: .14em;
-  text-transform: uppercase; color: rgba(255,255,255,.35);
-  margin-bottom: .25rem; display: flex; align-items: center; gap: .5rem;
-}
-.act-hero-eyebrow::before {
-  content: ''; width: 18px; height: 1.5px;
-  background: var(--gold-light); border-radius: 2px; display: block;
-}
-.act-hero-name {
-  font-size: 1.45rem; font-weight: 800; color: #fff;
-  letter-spacing: -.03em; line-height: 1.15;
-}
-.act-hero-meta {
-  display: flex; align-items: center; gap: 1rem;
-  margin-top: .45rem; flex-wrap: wrap;
-}
-.act-hero-meta-chip {
-  display: inline-flex; align-items: center; gap: .3rem;
-  font-size: .73rem; color: rgba(255,255,255,.4);
-  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
-  border-radius: 20px; padding: .2rem .65rem;
-}
-.act-hero-meta-chip i { font-size: .62rem; }
-
-.act-hero-right { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
-
-/* ── Stats Row (mini stats) ───────────────────────────────── */
-.act-stats-row {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-.act-stat-mini {
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 0.75rem 1.25rem;
-  flex: 1;
-  min-width: 100px;
-  transition: all 0.2s;
-  cursor: pointer;
-}
-.act-stat-mini:hover {
-  transform: translateY(-2px);
-  border-color: rgba(59,130,246,0.3);
-  background: rgba(59,130,246,.02);
-}
-.act-stat-mini .value {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--gold-light);
-  line-height: 1;
-}
-.act-stat-mini .label {
-  font-size: .7rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: .05em;
-}
-
-/* ── Activity Card ───────────────────────────────────────── */
-.act-card {
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
-}
-.act-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
-              rgba(59, 130, 246, 0.08) 0%, 
-              transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  border-radius: inherit;
-  z-index: 1;
-}
-.act-card:hover::before { opacity: 1; }
-.act-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(59, 130, 246, 0.3);
-}
-
-.act-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--border);
-  background: linear-gradient(135deg, var(--surface), var(--bg-alt));
-}
-.act-card-title {
-  font-size: .88rem;
-  font-weight: 700;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: .45rem;
-}
-.act-card-title i {
-  color: var(--gold);
-  font-size: .78rem;
-}
-.act-card-badge {
-  font-size: .67rem;
-  font-weight: 700;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: .12rem .52rem;
-  color: var(--muted);
-}
-
-/* Search Bar */
-.act-search-bar {
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  background: var(--surface);
-}
-.act-search-bar i {
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-.act-search-bar input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  padding: 0.5rem 0;
-  color: var(--text);
-  font-size: 0.85rem;
-  outline: none;
-}
-.act-search-bar input::placeholder {
-  color: var(--muted);
-}
-
-/* Premium Table */
-.act-table-wrapper {
-  overflow-x: auto;
-}
-.act-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.act-table thead {
-  background: #07101E;
-  border-bottom: 1px solid var(--border);
-}
-html[data-theme="light"] .act-table thead { background: var(--surface); }
-.act-table thead th {
-  padding: 1rem 1.2rem;
-  text-align: left;
-  font-size: .7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  color: var(--muted);
-  white-space: nowrap;
-}
-.act-table tbody tr {
-  border-bottom: 1px solid var(--border);
-  transition: background .12s;
-  animation: fadeUp .4s cubic-bezier(.22,1,.36,1) both;
-}
-.act-table tbody tr:hover {
-  background: rgba(59,130,246,.04);
-}
-.act-table tbody td {
-  padding: 1rem 1.2rem;
-  vertical-align: middle;
-  font-size: .85rem;
-}
-
-/* Action Badges */
-.action-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
-  padding: .25rem .75rem;
-  border-radius: 20px;
-  font-size: .7rem;
-  font-weight: 600;
-  font-family: monospace;
-  white-space: nowrap;
-}
-.action-badge.login {
-  background: rgba(52,211,153,.12);
-  color: #34D399;
-  border: 1px solid rgba(52,211,153,.2);
-}
-.action-badge.logout {
-  background: rgba(239,68,68,.12);
-  color: #F87171;
-  border: 1px solid rgba(239,68,68,.2);
-}
-.action-badge.create {
-  background: rgba(59,130,246,.12);
-  color: #60A5FA;
-  border: 1px solid rgba(59,130,246,.2);
-}
-.action-badge.update {
-  background: rgba(245,158,11,.12);
-  color: #F59E0B;
-  border: 1px solid rgba(245,158,11,.2);
-}
-.action-badge.delete {
-  background: rgba(239,68,68,.12);
-  color: #F87171;
-  border: 1px solid rgba(239,68,68,.2);
-}
-.action-badge.default {
-  background: rgba(107,114,128,.12);
-  color: #9CA3AF;
-  border: 1px solid rgba(107,114,128,.2);
-}
-
-/* User cell */
-.user-cell {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.user-avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(59,130,246,.2), rgba(200,145,26,.1));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  color: var(--gold-light);
-}
-.user-name {
-  font-weight: 500;
-  color: var(--text);
-}
-
-/* IP Address */
-.ip-address {
-  font-family: monospace;
-  font-size: .75rem;
-  background: var(--surface);
-  padding: 0.2rem 0.5rem;
-  border-radius: 6px;
-  display: inline-block;
-  color: var(--muted);
-}
-
-/* Timestamp */
-.timestamp {
-  font-size: .75rem;
-  color: var(--muted);
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-.timestamp i {
-  font-size: .65rem;
-}
-
-/* Details text */
-.details-text {
-  font-size: .8rem;
-  color: var(--text-soft);
-  max-width: 300px;
-  white-space: normal;
-  word-break: break-word;
-}
-
-/* Empty State */
-.empty-state {
-  text-align: center;
-  padding: 3rem 2rem;
-}
-.empty-icon {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto 1rem;
-  background: linear-gradient(135deg, rgba(59,130,246,.1), rgba(200,145,26,.05));
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
-  color: var(--muted);
-}
-.empty-state h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: .3rem;
-}
-.empty-state p {
-  color: var(--muted);
-  font-size: .8rem;
-}
-
-/* Premium Pagination */
-.act-pagination {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 1.5rem;
-  padding: 1rem 1.5rem;
-  border-top: 1px solid var(--border);
-  gap: 0.3rem;
-}
-.act-pagination a,
-.act-pagination span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 36px;
-  height: 36px;
-  padding: 0 0.75rem;
-  border-radius: 8px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text-soft);
-  font-size: .85rem;
-  transition: all .2s;
-  text-decoration: none;
-}
-.act-pagination a:hover {
-  background: var(--navy-light);
-  border-color: var(--navy-light);
-  color: #fff;
-  transform: translateY(-2px);
-}
-.act-pagination .current {
-  background: var(--navy-light);
-  border-color: var(--navy-light);
-  color: #fff;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .act-hero-inner { flex-direction: column; text-align: center; }
-  .act-stats-row { flex-wrap: wrap; }
-  .act-table thead th,
-  .act-table tbody td { padding: 0.75rem; }
-  .details-text { max-width: 200px; }
-}
-
-/* Print Styles */
-@media print {
-  .no-print { display: none; }
-  .act-card { break-inside: avoid; }
-  body { background: white; }
-}
-</style>
-
 <!-- Hero Section -->
-<div class="act-hero act-animate">
-  <div class="act-hero-mesh"></div>
-  <div class="act-hero-grid"></div>
-  <div class="act-hero-inner">
-    <div class="act-hero-left">
-      <div class="act-hero-icon"><i class="fa fa-history"></i></div>
+<div class="hero animate">
+  <div class="hero-mesh"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-icon"><i class="fa fa-history"></i></div>
       <div>
-        <div class="act-hero-eyebrow">System Administrator</div>
-        <div class="act-hero-name">Activity Log</div>
-        <div class="act-hero-meta">
-          <span class="act-hero-meta-chip"><i class="fa fa-calendar-days"></i> <?= date('l, d F Y') ?></span>
-          <span class="act-hero-meta-chip"><i class="fa fa-clock"></i> <?= date('H:i') ?></span>
-          <span class="act-hero-meta-chip" style="color:rgba(200,145,26,.7);border-color:rgba(200,145,26,.25);background:rgba(200,145,26,.06);">
+        <div class="hero-eyebrow">System Administrator</div>
+        <div class="hero-name">Activity Log</div>
+        <div class="hero-meta">
+          <span class="hero-meta-chip"><i class="fa fa-calendar-days"></i> <?= date('l, d F Y') ?></span>
+          <span class="hero-meta-chip"><i class="fa fa-clock"></i> <?= date('H:i') ?></span>
+          <span class="hero-meta-chip" style="color:rgba(200,145,26,.7);border-color:rgba(200,145,26,.25);background:rgba(200,145,26,.06);">
             <i class="fa fa-shield-alt"></i> Audit Trail
           </span>
         </div>
       </div>
     </div>
-    <div class="act-hero-right">
+    <div class="hero-right">
       <a href="<?= APP_URL ?>/admin/dashboard.php" class="btn btn-outline">
         <i class="fa fa-arrow-left"></i> Dashboard
       </a>
@@ -537,41 +51,41 @@ html[data-theme="light"] .act-table thead { background: var(--surface); }
 </div>
 
 <!-- Mini Stats Row -->
-<div class="act-stats-row act-animate act-animate-d1">
-  <div class="act-stat-mini hover-card">
+<div class="stats-row animate animate-d1">
+  <div class="stat-mini hover-card">
     <div class="value"><?= $total ?></div>
     <div class="label">Total Events</div>
   </div>
-  <div class="act-stat-mini hover-card">
+  <div class="stat-mini hover-card">
     <div class="value" style="color: #60A5FA;"><?= count(array_filter($logs, fn($l) => str_contains($l['action'] ?? '', 'LOGIN')))?></div>
     <div class="label">Logins</div>
   </div>
-  <div class="act-stat-mini hover-card">
+  <div class="stat-mini hover-card">
     <div class="value" style="color: #F59E0B;"><?= count(array_filter($logs, fn($l) => str_contains($l['action'] ?? '', 'CREATE') || str_contains($l['action'] ?? '', 'ADD')))?></div>
     <div class="label">Creations</div>
   </div>
-  <div class="act-stat-mini hover-card">
+  <div class="stat-mini hover-card">
     <div class="value" style="color: #34D399;"><?= $pages ?></div>
     <div class="label">Pages</div>
   </div>
 </div>
 
 <!-- Activity Log Card -->
-<div class="act-card act-animate act-animate-d2 hover-card">
-  <div class="act-card-header">
-    <div class="act-card-title">
+<div class="card animate animate-d2 hover-card">
+  <div class="card-header">
+    <div class="card-title">
       <i class="fa fa-list-alt"></i> System Audit Trail
-      <span class="act-card-badge"><?= $total ?> records</span>
+      <span class="card-badge"><?= $total ?> records</span>
     </div>
   </div>
   
-  <div class="act-search-bar no-print">
-    <i class="fa fa-search"></i>
+  <div class="search-wrap no-print" style="padding: 20px;">
+    <i class="fa fa-search" style="margin-left: 20px;"></i>
     <input type="text" id="tableSearch" placeholder="Filter by user, action, details, or IP address...">
   </div>
   
-  <div class="act-table-wrapper">
-    <table class="act-table" id="activityTable">
+  <div class="table-wrapper">
+    <table class="table" id="activityTable">
       <thead>
         <tr>
           <th>#</th>
@@ -653,7 +167,7 @@ html[data-theme="light"] .act-table thead { background: var(--surface); }
   
   <!-- Pagination -->
   <?php if ($pages > 1): ?>
-  <div class="act-pagination no-print">
+  <div class="pagination no-print" style="padding: 20px;">
     <?php if ($page > 1): ?>
       <a href="?page=<?= $page-1 ?>">
         <i class="fa fa-chevron-left"></i>
@@ -693,7 +207,7 @@ html[data-theme="light"] .act-table thead { background: var(--surface); }
 <script>
 // Spotlight effect for hover-card elements
 (function() {
-  const spotlightElements = document.querySelectorAll('.hover-card, .act-card');
+  const spotlightElements = document.querySelectorAll('.hover-card, .card');
   
   spotlightElements.forEach(el => {
     let spotlight = el.querySelector('.sc-spotlight');

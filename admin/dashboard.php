@@ -51,571 +51,8 @@ $pageTitle = 'Admin Dashboard';
 include __DIR__ . '/../includes/header.php';
 ?>
 
-<style>
-/* ─────────────────────────────────────────────────────────────
-   ADMIN DASHBOARD — Premium Edition (Matches Officer Dashboard)
-   ───────────────────────────────────────────────────────────── */
+<link rel="stylesheet" href="../css/partials/dashboard.css">
 
-/* ── Entry animations ──────────────────────────────────────── */
-@keyframes fadeUp   { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-@keyframes fadeIn   { from{opacity:0} to{opacity:1} }
-@keyframes scaleIn  { from{opacity:0;transform:scale(.94)} to{opacity:1;transform:scale(1)} }
-@keyframes shimmer  {
-  0%  { background-position: -200% center }
-  100%{ background-position:  200% center }
-}
-@keyframes pulse-ring {
-  0%  { box-shadow: 0 0 0 0 rgba(52,211,153,.5) }
-  70% { box-shadow: 0 0 0 8px rgba(52,211,153,0) }
-  100%{ box-shadow: 0 0 0 0 rgba(52,211,153,0) }
-}
-@keyframes float {
-  0%,100%{ transform:translateY(0) }
-  50%    { transform:translateY(-6px) }
-}
-@keyframes modalSlide {
-  from { opacity: 0; transform: translateY(30px) scale(0.95); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.admin-animate { animation: fadeUp .5s cubic-bezier(.22,1,.36,1) both }
-.admin-animate-d1 { animation-delay:.06s }
-.admin-animate-d2 { animation-delay:.12s }
-.admin-animate-d3 { animation-delay:.18s }
-.admin-animate-d4 { animation-delay:.24s }
-.admin-animate-d5 { animation-delay:.30s }
-
-/* ── Spotlight Card Effect ───────────────────────────────── */
-.hover-card {
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
-  overflow: hidden;
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-
-.hover-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
-              rgba(59, 130, 246, 0.12) 0%, 
-              transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.hover-card:hover::before {
-  opacity: 1;
-}
-
-.hover-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(59, 130, 246, 0.3);
-}
-
-/* ── Hero Section ────────────────────────────────────────── */
-.admin-hero {
-  position: relative;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  margin-bottom: 1.5rem;
-  background: #060D1A;
-  border: 1px solid rgba(59,130,246,.18);
-  animation: fadeIn .6s ease both;
-}
-html[data-theme="light"] .admin-hero { background: #0B2545; border-color: rgba(59,130,246,.3); }
-
-.admin-hero-mesh {
-  position: absolute; inset: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 60% 80% at 0% 50%, rgba(29,78,216,.22) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 60% at 100% 20%, rgba(200,145,26,.12) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 70% at 60% 100%, rgba(13,148,136,.10) 0%, transparent 55%);
-}
-
-.admin-hero-grid {
-  position: absolute; inset: 0; pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,.4) 30%, rgba(0,0,0,.4) 70%, transparent);
-}
-
-.admin-hero::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 3;
-  background: linear-gradient(90deg, transparent 0%, var(--gold-light) 30%, #fff9 50%, var(--gold-light) 70%, transparent 100%);
-  background-size: 200% 100%;
-  animation: shimmer 3s linear infinite;
-}
-
-.admin-hero-inner {
-  position: relative; z-index: 2;
-  display: flex; align-items: center;
-  justify-content: space-between; flex-wrap: wrap;
-  gap: 1.2rem; padding: 1.75rem 2rem;
-}
-
-.admin-hero-left { display: flex; align-items: center; gap: 1.25rem; }
-
-.admin-hero-icon {
-  position: relative; width: 60px; height: 60px;
-  border-radius: 16px; flex-shrink: 0;
-  background: linear-gradient(135deg, rgba(59,130,246,.25), rgba(59,130,246,.08));
-  border: 1px solid rgba(59,130,246,.3);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem; color: #93C5FD;
-  box-shadow: 0 0 30px rgba(59,130,246,.2), inset 0 1px 0 rgba(255,255,255,.08);
-  animation: float 4s ease-in-out infinite;
-}
-.admin-hero-icon::after {
-  content: '';
-  position: absolute; inset: -1px; border-radius: 17px;
-  background: linear-gradient(135deg, rgba(59,130,246,.4), transparent 60%);
-  opacity: .5; pointer-events: none;
-}
-
-.admin-hero-eyebrow {
-  font-size: .67rem; font-weight: 700; letter-spacing: .14em;
-  text-transform: uppercase; color: rgba(255,255,255,.35);
-  margin-bottom: .25rem; display: flex; align-items: center; gap: .5rem;
-}
-.admin-hero-eyebrow::before {
-  content: ''; width: 18px; height: 1.5px;
-  background: var(--gold-light); border-radius: 2px; display: block;
-}
-.admin-hero-name {
-  font-size: 1.45rem; font-weight: 800; color: #fff;
-  letter-spacing: -.03em; line-height: 1.15;
-}
-.admin-hero-meta {
-  display: flex; align-items: center; gap: 1rem;
-  margin-top: .45rem; flex-wrap: wrap;
-}
-.admin-hero-meta-chip {
-  display: inline-flex; align-items: center; gap: .3rem;
-  font-size: .73rem; color: rgba(255,255,255,.4);
-  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
-  border-radius: 20px; padding: .2rem .65rem;
-}
-.admin-hero-meta-chip i { font-size: .62rem; }
-
-/* ── Quick Actions Grid ──────────────────────────────────── */
-.quick-actions-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-@media(max-width:640px){ .quick-actions-grid { grid-template-columns: 1fr; } }
-
-.quick-action-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.2rem 1.4rem;
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  cursor: pointer;
-  text-align: left;
-  font-family: inherit;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
-  overflow: hidden;
-}
-.quick-action-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
-              rgba(59, 130, 246, 0.1) 0%, 
-              transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-.quick-action-card:hover::before { opacity: 1; }
-.quick-action-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(59, 130, 246, 0.3);
-}
-.qa-icon {
-  width: 48px; height: 48px;
-  border-radius: var(--radius);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.2rem; flex-shrink: 0;
-}
-.qa-body { flex: 1; }
-.qa-title { font-size: .95rem; font-weight: 700; color: var(--text); }
-.qa-sub { font-size: .72rem; color: var(--muted); margin-top: .2rem; }
-.qa-arrow { color: var(--muted); font-size: .85rem; flex-shrink: 0; transition: transform .2s; }
-.quick-action-card:hover .qa-arrow { transform: translateX(3px); color: var(--gold-light); }
-
-/* ── Stats Grid (Premium) ────────────────────────────────── */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-@media(max-width:1100px){ .stats-grid { grid-template-columns: repeat(2, 1fr); } }
-@media(max-width:640px) { .stats-grid { grid-template-columns: 1fr; } }
-
-.stat-card {
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1rem 1.2rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.stat-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
-              rgba(59, 130, 246, 0.12) 0%, 
-              transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-.stat-card:hover::before { opacity: 1; }
-.stat-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(59, 130, 246, 0.3);
-}
-.stat-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-}
-.stat-card.blue .stat-icon { background: rgba(59,130,246,.12); color: #60A5FA; }
-.stat-card.gold .stat-icon { background: rgba(245,158,11,.12); color: #F59E0B; }
-.stat-card.teal .stat-icon { background: rgba(45,212,191,.12); color: #2DD4BF; }
-.stat-card.green .stat-icon { background: rgba(52,211,153,.12); color: #34D399; }
-.stat-card.red .stat-icon { background: rgba(239,68,68,.12); color: #F87171; }
-
-.stat-num {
-  font-size: 1.8rem;
-  font-weight: 800;
-  color: var(--text);
-  line-height: 1.2;
-  letter-spacing: -.03em;
-}
-.stat-label {
-  font-size: .7rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: .05em;
-}
-
-/* ── Main Content Grid ───────────────────────────────────── */
-.dash-main {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 1.2rem;
-}
-@media(max-width:768px){ .dash-main { grid-template-columns: 1fr; } }
-
-/* ── Cards (Premium) ─────────────────────────────────────── */
-.admin-card {
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
-}
-.admin-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
-              rgba(59, 130, 246, 0.08) 0%, 
-              transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  border-radius: inherit;
-  z-index: 1;
-}
-.admin-card:hover::before { opacity: 1; }
-.admin-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(59, 130, 246, 0.3);
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--border);
-  background: linear-gradient(135deg, var(--surface), var(--bg-alt));
-}
-.card-title {
-  font-size: .88rem;
-  font-weight: 700;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: .45rem;
-}
-.card-title i {
-  color: var(--gold);
-  font-size: .78rem;
-}
-
-/* Tables */
-.table-wrapper {
-  overflow-x: auto;
-}
-.table-wrapper table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.table-wrapper thead {
-  background: #07101E;
-  border-bottom: 1px solid var(--border);
-}
-html[data-theme="light"] .table-wrapper thead { background: var(--surface); }
-.table-wrapper thead th {
-  padding: 0.9rem 1.2rem;
-  text-align: left;
-  font-size: .7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  color: var(--muted);
-}
-.table-wrapper tbody tr {
-  border-bottom: 1px solid var(--border);
-  transition: background .12s;
-}
-.table-wrapper tbody tr:hover {
-  background: rgba(59,130,246,.04);
-}
-.table-wrapper tbody td {
-  padding: 0.9rem 1.2rem;
-  vertical-align: middle;
-  font-size: .85rem;
-}
-.table-wrapper .no-data td {
-  text-align: center;
-  padding: 2rem;
-  color: var(--muted);
-}
-.table-wrapper .no-data i {
-  font-size: 1.2rem;
-  margin-right: 0.5rem;
-}
-
-/* List items for stats */
-.stat-list-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.7rem 1.2rem;
-  border-bottom: 1px solid var(--border);
-  transition: background .12s;
-}
-.stat-list-item:hover {
-  background: rgba(59,130,246,.04);
-}
-.stat-list-item:last-child {
-  border-bottom: none;
-}
-.stat-list-label {
-  font-size: .8rem;
-  color: var(--text-soft);
-}
-.stat-list-value {
-  font-weight: 700;
-  color: var(--text);
-  font-size: .9rem;
-}
-
-/* ── Premium Modal ───────────────────────────────────────── */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.25s ease;
-}
-.modal-overlay.active {
-  visibility: visible;
-  opacity: 1;
-}
-.modal {
-  background: var(--bg-alt);
-  border-radius: var(--radius-lg);
-  max-width: 550px;
-  width: 90%;
-  border: 1px solid var(--border);
-  box-shadow: 0 25px 50px rgba(0,0,0,.5);
-  animation: modalSlide 0.3s cubic-bezier(.34,1.56,.64,1);
-}
-.modal-header {
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: linear-gradient(135deg, var(--surface), var(--bg-alt));
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-}
-.modal-title {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-.modal-title i {
-  color: var(--gold);
-}
-.modal-close {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  cursor: pointer;
-  color: var(--muted);
-  transition: all .2s;
-}
-.modal-close:hover {
-  background: var(--danger);
-  border-color: var(--danger);
-  color: #fff;
-  transform: scale(1.05);
-}
-.modal-body {
-  padding: 1.5rem;
-  max-height: 60vh;
-  overflow-y: auto;
-}
-.modal-footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.8rem;
-  background: var(--surface);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-}
-
-/* Form elements in modal */
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-.form-group.full { grid-column: 1 / -1; }
-.form-group label {
-  font-size: .7rem;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  color: var(--muted);
-  margin-bottom: .3rem;
-  display: block;
-}
-.form-group input {
-  width: 100%;
-  padding: .7rem 1rem;
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius);
-  color: var(--text);
-  font-size: .85rem;
-  transition: all .2s;
-}
-.form-group input:focus {
-  outline: none;
-  border-color: var(--navy-light);
-  box-shadow: 0 0 0 3px rgba(59,130,246,.1);
-}
-.input-wrap {
-  position: relative;
-}
-.input-wrap .eye-btn {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: var(--muted);
-  cursor: pointer;
-  padding: 0 5px;
-}
-.alert {
-  padding: 0.8rem 1rem;
-  border-radius: var(--radius);
-  font-size: .8rem;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-.alert-info {
-  background: rgba(59,130,246,.1);
-  border: 1px solid rgba(59,130,246,.2);
-  color: #60A5FA;
-}
-.alert-warning {
-  background: rgba(245,158,11,.1);
-  border: 1px solid rgba(245,158,11,.2);
-  color: #F59E0B;
-}
-
-/* Buttons */
-.btn-gold {
-  background: linear-gradient(135deg, #B45309, #F59E0B);
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: var(--radius);
-  color: #fff;
-  font-weight: 600;
-  transition: all .2s;
-}
-.btn-gold:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(245,158,11,.3);
-}
-</style>
-
-<!-- Hero Section (matching officer dashboard) -->
 <div class="admin-hero admin-animate">
   <div class="admin-hero-mesh"></div>
   <div class="admin-hero-grid"></div>
@@ -652,7 +89,7 @@ html[data-theme="light"] .table-wrapper thead { background: var(--surface); }
 
 <!-- Quick Action Cards -->
 <div class="quick-actions-grid admin-animate admin-animate-d1">
-  <button class="quick-action-card" data-modal-open="modalAddOfficer" onclick="window.location.href = './create_officer.php'">
+  <button class="quick-action-card" data-modal-open="modalAddOfficer">
     <div class="qa-icon" style="background:rgba(59,130,246,.12);color:#60A5FA;">
       <i class="fa fa-id-badge"></i>
     </div>
@@ -663,7 +100,7 @@ html[data-theme="light"] .table-wrapper thead { background: var(--surface); }
     <i class="fa fa-plus qa-arrow"></i>
   </button>
 
-  <button class="quick-action-card" data-modal-open="modalAddAdmin" onclick="window.location.href = './create_admin.php'">
+  <button class="quick-action-card" data-modal-open="modalAddAdmin">
     <div class="qa-icon" style="background:rgba(245,158,11,.12);color:#F59E0B;">
       <i class="fa fa-user-shield"></i>
     </div>
@@ -722,7 +159,7 @@ html[data-theme="light"] .table-wrapper thead { background: var(--surface); }
       </a>
     </div>
     <div class="table-wrapper">
-      <table>
+      <table class="table">
         <thead>
           <tr><th>App Number</th><th>Applicant</th><th>Type</th><th>Status</th><th>Date</th></tr>
         </thead>
@@ -789,29 +226,41 @@ html[data-theme="light"] .table-wrapper thead { background: var(--surface); }
           <i class="fa fa-info-circle"></i>
           Officers can capture applications, update processing stages, and release passports.
         </div>
-        <div class="form-grid" style="margin-top:1rem;">
+        <div class="form-grid">
           <div class="form-group full">
-            <label>Full Name *</label>
-            <input type="text" name="full_name" required placeholder="e.g. Jane Mokoena">
-          </div>
-          <div class="form-group">
-            <label>Username *</label>
-            <input type="text" name="username" required placeholder="Unique username">
-          </div>
-          <div class="form-group">
-            <label>Email *</label>
-            <input type="email" name="email" required placeholder="officer@npats.gov.ls">
-          </div>
-          <div class="form-group">
-            <label>Phone</label>
-            <input type="tel" name="phone" placeholder="+266 …">
-          </div>
-          <div class="form-group full">
-            <label>Password * <span style="color:var(--muted);font-weight:400;">(min. 8 chars)</span></label>
+            <label><i class="fa fa-user"></i> Full Name *</label>
             <div class="input-wrap">
-              <input type="password" name="password" required placeholder="Strong password" style="padding-right:2.8rem;">
+              <input type="text" name="full_name" required placeholder="e.g. Jane Mokoena">
+            </div>
+          </div>
+          <div class="form-group">
+            <label><i class="fa fa-at"></i> Username *</label>
+            <div class="input-wrap">
+              <input type="text" name="username" required placeholder="Unique username">
+            </div>
+          </div>
+          <div class="form-group">
+            <label><i class="fa fa-envelope"></i> Email *</label>
+            <div class="input-wrap">
+              <input type="email" name="email" required placeholder="officer@npats.gov.ls">
+            </div>
+          </div>
+          <div class="form-group">
+            <label><i class="fa fa-phone"></i> Phone</label>
+            <div class="input-wrap">
+              <input type="tel" name="phone" placeholder="+266 …">
+            </div>
+          </div>
+          <div class="form-group full">
+            <label><i class="fa fa-lock"></i> Password * <span class="text-muted">(min. 8 chars)</span></label>
+            <div class="input-wrap">
+              <input type="password" name="password" required placeholder="Strong password" style="padding-right: 2.8rem;">
               <button type="button" class="eye-btn"><i class="fa fa-eye"></i></button>
             </div>
+            <div class="strength-bar">
+              <div class="strength-fill"></div>
+            </div>
+            <div class="strength-text"></div>
           </div>
         </div>
       </div>
@@ -838,36 +287,47 @@ html[data-theme="light"] .table-wrapper thead { background: var(--surface); }
           <i class="fa fa-triangle-exclamation"></i>
           Admins have <strong>full system access</strong> — user management, all applications, reports and audit logs.
         </div>
-        <div class="form-grid" style="margin-top:1rem;">
+        <div class="form-grid">
           <div class="form-group full">
-            <label>Full Name *</label>
-            <input type="text" name="full_name" required placeholder="e.g. Lesedi Thamae">
-          </div>
-          <div class="form-group">
-            <label>Username *</label>
-            <input type="text" name="username" required placeholder="Unique username">
-          </div>
-          <div class="form-group">
-            <label>Email *</label>
-            <input type="email" name="email" required placeholder="admin@npats.gov.ls">
-          </div>
-          <div class="form-group">
-            <label>Phone</label>
-            <input type="tel" name="phone" placeholder="+266 …">
-          </div>
-          <div class="form-group full">
-            <label>Password * <span style="color:var(--muted);font-weight:400;">(min. 8 chars)</span></label>
+            <label><i class="fa fa-user"></i> Full Name *</label>
             <div class="input-wrap">
-              <input type="password" name="password" required placeholder="Strong password" style="padding-right:2.8rem;">
+              <input type="text" name="full_name" required placeholder="e.g. Lesedi Thamae">
+            </div>
+          </div>
+          <div class="form-group">
+            <label><i class="fa fa-at"></i> Username *</label>
+            <div class="input-wrap">
+              <input type="text" name="username" required placeholder="Unique username">
+            </div>
+          </div>
+          <div class="form-group">
+            <label><i class="fa fa-envelope"></i> Email *</label>
+            <div class="input-wrap">
+              <input type="email" name="email" required placeholder="admin@npats.gov.ls">
+            </div>
+          </div>
+          <div class="form-group">
+            <label><i class="fa fa-phone"></i> Phone</label>
+            <div class="input-wrap">
+              <input type="tel" name="phone" placeholder="+266 …">
+            </div>
+          </div>
+          <div class="form-group full">
+            <label><i class="fa fa-lock"></i> Password * <span class="text-muted">(min. 8 chars)</span></label>
+            <div class="input-wrap">
+              <input type="password" name="password" required placeholder="Strong password" style="padding-right: 2.8rem;">
               <button type="button" class="eye-btn"><i class="fa fa-eye"></i></button>
             </div>
+            <div class="strength-bar">
+              <div class="strength-fill"></div>
+            </div>
+            <div class="strength-text"></div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline" data-modal-close="modalAddAdmin">Cancel</button>
-        <button type="submit" class="btn btn-gold"
-          onclick="return confirm('Grant full administrator privileges to this user?')">
+        <button type="submit" class="btn btn-gold" onclick="return confirm('Grant full administrator privileges to this user?')">
           <i class="fa fa-user-shield"></i> Create Administrator
         </button>
       </div>
@@ -876,6 +336,163 @@ html[data-theme="light"] .table-wrapper thead { background: var(--surface); }
 </div>
 
 <script>
+  (function () {
+    const R = 16;
+    const DURATION = 500;
+
+    function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+    function buildPts(w, h, r) {
+      const pts = [];
+      const steps = 12;
+      function corner(cx, cy, a0, a1) {
+        for (let i = 0; i <= steps; i++) {
+          const a = a0 + (a1 - a0) * i / steps;
+          pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+        }
+      }
+      pts.push([r, 0]); pts.push([w-r, 0]);
+      corner(w-r, r,   -Math.PI/2, 0);
+      pts.push([w, r]); pts.push([w, h-r]);
+      corner(w-r, h-r, 0, Math.PI/2);
+      pts.push([w-r, h]); pts.push([r, h]);
+      corner(r, h-r,   Math.PI/2, Math.PI);
+      pts.push([0, h-r]); pts.push([0, r]);
+      corner(r, r,     Math.PI, 3*Math.PI/2);
+      pts.push([r, 0]);
+      return pts;
+    }
+
+    function buildLens(pts) {
+      const l = [0];
+      for (let i = 1; i < pts.length; i++) {
+        const dx = pts[i][0]-pts[i-1][0], dy = pts[i][1]-pts[i-1][1];
+        l.push(l[i-1] + Math.sqrt(dx*dx+dy*dy));
+      }
+      return l;
+    }
+
+    function closestT(pts, lens, mx, my) {
+      let best = Infinity, bestT = 0;
+      for (let i = 1; i < pts.length; i++) {
+        const [x1,y1]=pts[i-1],[x2,y2]=pts[i];
+        const dx=x2-x1, dy=y2-y1, l2=dx*dx+dy*dy;
+        let t = l2<1e-9 ? 0 : Math.max(0,Math.min(1,((mx-x1)*dx+(my-y1)*dy)/l2));
+        const px=x1+t*dx, py=y1+t*dy;
+        const d=(mx-px)**2+(my-py)**2;
+        if (d<best){best=d; bestT=lens[i-1]+t*(lens[i]-lens[i-1]);}
+      }
+      return bestT;
+    }
+
+    function strokeArc(ctx, pts, lens, total, from, to) {
+      let f = ((from%total)+total)%total;
+      let t2 = f+(to-from);
+      ctx.beginPath();
+      let started = false;
+      for (let pass = 0; pass <= 1; pass++) {
+        const off = pass*total;
+        for (let i = 1; i < pts.length; i++) {
+          const s0=lens[i-1]+off, s1=lens[i]+off, sl=s1-s0;
+          if (sl<1e-9||s1<f||s0>t2) continue;
+          const ta=Math.max(0,(f-s0)/sl), tb=Math.min(1,(t2-s0)/sl);
+          const [x1,y1]=pts[i-1],[x2,y2]=pts[i];
+          const ax=x1+ta*(x2-x1), ay=y1+ta*(y2-y1);
+          const bx=x1+tb*(x2-x1), by=y1+tb*(y2-y1);
+          if (!started){ctx.moveTo(ax,ay);started=true;}
+          else ctx.lineTo(ax,ay);
+          ctx.lineTo(bx,by);
+        }
+      }
+      ctx.stroke();
+    }
+
+    function initCard(card) {
+      const dpr = window.devicePixelRatio || 1;
+      const cvs = document.createElement('canvas');
+      cvs.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;';
+      card.appendChild(cvs);
+
+      // read accent color from CSS variable
+      const accent = getComputedStyle(card).getPropertyValue('--card-accent').trim() || '#888';
+
+      let pts, lens, total;
+      let drawFrom=0, drawTo=0, state='idle', animId=null, animTs=null;
+
+      function setup() {
+        const w=card.offsetWidth, h=card.offsetHeight;
+        cvs.width=w*dpr; cvs.height=h*dpr;
+        pts=buildPts(w,h,R); lens=buildLens(pts);
+        total=lens[lens.length-1];
+      }
+
+      function render(accent) {
+        const ctx=cvs.getContext('2d');
+        ctx.clearRect(0,0,cvs.width,cvs.height);
+        if (drawTo-drawFrom < 0.5) return;
+        ctx.save(); ctx.scale(dpr,dpr);
+        ctx.strokeStyle=accent; ctx.lineWidth=1.5;
+        ctx.lineCap='round'; ctx.lineJoin='round';
+        strokeArc(ctx,pts,lens,total,drawFrom,drawTo);
+        ctx.restore();
+      }
+
+      function cancel() { if(animId){cancelAnimationFrame(animId);animId=null;animTs=null;} }
+
+      function animate(fs,ts,ft,tt,done) {
+        cancel(); animTs=null;
+        const accent = getComputedStyle(card).getPropertyValue('--card-accent').trim() || '#888';
+        animId=requestAnimationFrame(function tick(now){
+          if(!animTs) animTs=now;
+          const e=ease(Math.min((now-animTs)/DURATION,1));
+          drawFrom=fs+(ft-fs)*e; drawTo=ts+(tt-ts)*e;
+          render(accent);
+          if((now-animTs)<DURATION) animId=requestAnimationFrame(tick);
+          else { drawFrom=ft; drawTo=tt; animId=null; done&&done(); }
+        });
+      }
+
+      card.addEventListener('mouseenter', e => {
+        setup();
+        const accent = getComputedStyle(card).getPropertyValue('--card-accent').trim() || '#888';
+        const br=card.getBoundingClientRect();
+        const entryT=closestT(pts,lens,e.clientX-br.left,e.clientY-br.top);
+        cancel();
+        if (state==='idle') {
+          drawFrom=entryT; drawTo=entryT;
+          animate(entryT,entryT,entryT,entryT+total,()=>{ state='full'; });
+          state='drawing';
+        } else if (state==='erasing') {
+          animate(drawFrom,drawTo,drawFrom,drawFrom+total,()=>{ state='full'; });
+          state='drawing';
+        }
+        card.addEventListener('mousemove', onMove);
+      });
+
+      function onMove(e) {
+        const br=card.getBoundingClientRect();
+        card.style.setProperty('--x', (e.clientX-br.left)+'px');
+        card.style.setProperty('--y', (e.clientY-br.top)+'px');
+      }
+
+      card.addEventListener('mouseleave', e => {
+        setup();
+        const br=card.getBoundingClientRect();
+        let exitT=closestT(pts,lens,e.clientX-br.left,e.clientY-br.top);
+        let absExit=exitT;
+        while(absExit<drawFrom) absExit+=total;
+        while(absExit>drawFrom+total) absExit-=total;
+        absExit=Math.max(drawFrom,Math.min(drawTo,absExit));
+        cancel();
+        state='erasing';
+        animate(drawFrom,drawTo,absExit,absExit,()=>{ state='idle'; });
+        card.removeEventListener('mousemove', onMove);
+      });
+    }
+
+    document.querySelectorAll('.stat-card').forEach(initCard);
+  })();
+  
 // Spotlight effect for hover-card elements
 (function() {
   const spotlightElements = document.querySelectorAll('.hover-card, .quick-action-card, .stat-card');
@@ -964,17 +581,50 @@ document.addEventListener('keydown', (e) => {
 // Toggle password visibility
 document.querySelectorAll('.eye-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    const input = btn.closest('.input-wrap').querySelector('input');
-    const icon = btn.querySelector('i');
+    const wrap  = btn.closest('.input-wrap');
+    const input = document.querySelector('input[type="password"], input[type="text"]');
+    const icon  = btn.querySelector('i');
     if (input.type === 'password') {
       input.type = 'text';
-      icon.classList.remove('fa-eye');
-      icon.classList.add('fa-eye-slash');
+      icon.classList.replace('fa-eye', 'fa-eye-slash');
     } else {
       input.type = 'password';
-      icon.classList.remove('fa-eye-slash');
-      icon.classList.add('fa-eye');
+      icon.classList.replace('fa-eye-slash', 'fa-eye');
     }
+  });
+});
+
+// Password strength meter
+document.querySelectorAll('input[name="password"]').forEach(input => {
+  const formGroup = input.closest('.form-group');
+  if (!formGroup) return;
+  const fill = formGroup.querySelector('.strength-fill');
+  const text = formGroup.querySelector('.strength-text');
+  if (!fill || !text) return;
+
+  input.addEventListener('input', () => {
+    const val = input.value;
+    let score = 0;
+    if (val.length >= 8)               score++;
+    if (val.length >= 12)              score++;
+    if (/[A-Z]/.test(val))             score++;
+    if (/[0-9]/.test(val))             score++;
+    if (/[^A-Za-z0-9]/.test(val))      score++;
+
+    const levels = [
+      { pct: '0%',   color: '',          label: '' },
+      { pct: '25%',  color: '#F87171',   label: 'Weak' },
+      { pct: '50%',  color: '#FBBF24',   label: 'Fair' },
+      { pct: '75%',  color: '#60A5FA',   label: 'Good' },
+      { pct: '90%',  color: '#34D399',   label: 'Strong' },
+      { pct: '100%', color: '#34D399',   label: 'Very Strong' },
+    ];
+
+    const lvl = val.length === 0 ? levels[0] : levels[Math.min(score, 5)];
+    fill.style.width      = lvl.pct;
+    fill.style.background = lvl.color;
+    text.textContent      = lvl.label;
+    text.style.color      = lvl.color;
   });
 });
 </script>

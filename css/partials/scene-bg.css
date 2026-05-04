@@ -1,0 +1,49 @@
+/* ============================================================
+   scene-bg.css — Universal 3D particle background
+   Include ONCE per page, after base.css.
+   The canvas is fixed behind all content; pages scroll normally.
+   ============================================================ */
+
+/* ── Background canvas ─────────────────────────────────────── */
+#scene-bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Ensure every layout layer sits above the canvas ───────── */
+.navbar      { z-index: 900; position: sticky; }
+.main-content{ position: relative; z-index: 1; }
+.site-footer { position: relative; z-index: 1; }
+
+/* Auth pages — both panels float above canvas */
+.auth-page,
+.auth-panel,
+.auth-form-panel { position: relative; z-index: 1; }
+
+/* ── Dark theme: canvas is visible as-is ──────────────────── */
+/* ── Light theme: dim the canvas so it doesn't overpower ──── */
+html[data-theme="light"] #scene-bg-canvas {
+  opacity: 0.35;
+}
+
+/* ── Subtle full-page radial vignette (dark theme only) ────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse 90% 80% at 50% 10%,
+    transparent 30%,
+    rgba(6, 10, 20, 0.45) 100%
+  );
+}
+
+html[data-theme="light"] body::after {
+  display: none;
+}

@@ -1,5 +1,5 @@
 /* ============================================================
-   layout.css — Page structure, cards, stat cards, footer
+   layout.css — Page structure, stat cards, app-hero, footer
    ============================================================ */
 
 .main-content {
@@ -31,16 +31,14 @@
 }
 
 .page-title i { color: var(--gold); font-size: 1.2rem; }
-
 .page-subtitle { font-size: .82rem; color: var(--muted); margin-top: .1rem; }
 
-/* ── Card ──────────────────────────────────────────────────── */
+/* ── Generic card ──────────────────────────────────────────── */
 .card {
   background: var(--bg-alt);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  padding: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
@@ -49,10 +47,9 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: .5rem;
-  margin-bottom: 1.25rem;
   padding-bottom: .9rem;
   border-bottom: 1px solid var(--border);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .card-title {
@@ -84,22 +81,8 @@
   gap: .9rem;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 }
-
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-}
-
-.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
-
-.stat-card.blue::before  { background: var(--navy-light); }
-.stat-card.green::before { background: var(--success); }
-.stat-card.gold::before  { background: var(--gold); }
-.stat-card.red::before   { background: var(--danger); }
-.stat-card.teal::before  { background: #2DD4BF; }
 
 .stat-icon {
   width: 42px; height: 42px;
@@ -108,11 +91,11 @@
   font-size: 1rem; flex-shrink: 0;
 }
 
-.stat-card.blue  .stat-icon { background: var(--info-bg);    color: var(--info); }
-.stat-card.green .stat-icon { background: var(--success-bg); color: var(--success); }
-.stat-card.gold  .stat-icon { background: var(--warning-bg); color: var(--gold); }
-.stat-card.red   .stat-icon { background: var(--danger-bg);  color: var(--danger); }
-.stat-card.teal  .stat-icon { background: rgba(45,212,191,.15); color: #2DD4BF; }
+.stat-card.blue  .stat-icon { background: var(--info-bg);           color: var(--info); }
+.stat-card.green .stat-icon { background: var(--success-bg);        color: var(--success); }
+.stat-card.gold  .stat-icon { background: var(--warning-bg);        color: var(--gold); }
+.stat-card.red   .stat-icon { background: var(--danger-bg);         color: var(--danger); }
+.stat-card.teal  .stat-icon { background: rgba(45,212,191,.15);     color: #2DD4BF; }
 
 .stat-num   { font-size: 1.9rem; font-weight: 600; line-height: 1; color: var(--text); letter-spacing: -.03em; }
 .stat-label { font-size: .76rem; color: var(--muted); margin-top: .25rem; }
@@ -124,7 +107,6 @@
   border-radius: var(--radius-lg);
   padding: 1.75rem;
   margin-bottom: 1.5rem;
-  color: var(--text);
   position: relative;
   overflow: hidden;
 }
@@ -137,14 +119,9 @@
   background: linear-gradient(90deg, var(--gold), var(--gold-light));
 }
 
-/* In dark: hero gets a richer dark navy feel */
 html:not([data-theme="light"]) .app-hero {
   background: #131C2E;
   border-color: #2A3A55;
-}
-
-html:not([data-theme="light"]) .app-hero .app-hero-meta {
-  color: var(--text-soft);
 }
 
 .app-hero-inner {
@@ -184,20 +161,15 @@ html:not([data-theme="light"]) .app-hero .app-hero-meta {
 
 .app-hero-meta span i { font-size: .72rem; margin-right: .2rem; }
 
-/* ── Info grid ─────────────────────────────────────────────── */
-.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem 1.2rem; }
-.info-label { font-size: .7rem; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .1rem; }
-.info-value { font-size: .88rem; color: var(--text); }
-
 /* ── Footer ────────────────────────────────────────────────── */
 .site-footer {
   background: var(--nav-bg);
-  color: rgba(255, 255, 255, .3);
+  color: rgba(255,255,255,.3);
   text-align: center;
   padding: 1.1rem 1.5rem;
   font-size: .75rem;
   margin-top: auto;
-  border-top: 1px solid rgba(255, 255, 255, .06);
+  border-top: 1px solid rgba(255,255,255,.06);
 }
 
 /* ── Responsive ────────────────────────────────────────────── */
@@ -205,6 +177,5 @@ html:not([data-theme="light"]) .app-hero .app-hero-meta {
   .main-content   { padding: 1.2rem 1rem; }
   .page-title     { font-size: 1.2rem; }
   .stats-grid     { grid-template-columns: 1fr 1fr; }
-  .info-grid      { grid-template-columns: 1fr; }
   .app-hero-inner { grid-template-columns: 1fr; }
 }

@@ -1,0 +1,119 @@
+/* ============================================================
+   animations.css — Keyframes & animation utility classes
+   Consolidates: entry-animation.css + dashboard animation blocks
+   ============================================================ */
+
+/* ── Keyframes ─────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)   translateY(0); }
+}
+
+@keyframes modalSlide {
+  from { opacity: 0; transform: translateY(30px) scale(.95); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+@keyframes stagePulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.2); background: #60A5FA; }
+  100% { transform: scale(1); }
+}
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0   rgba(96,165,250,.4); }
+  70%  { box-shadow: 0 0 0 6px rgba(96,165,250,0); }
+  100% { box-shadow: 0 0 0 0   rgba(96,165,250,0); }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bar-grow {
+  to { width: var(--target-w); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 15px rgba(59,130,246,.3); }
+  50%       { box-shadow: 0 0 25px rgba(59,130,246,.6); }
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes borderFlow {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+
+@keyframes dropdownSlide {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Animation utility classes ─────────────────────────────── */
+/*
+ * All role-specific prefixes (admin-, applicant-, od-, cadmin-,
+ * track-, rel-, ma-) map to the same four-step stagger.
+ * Add new prefixes here if needed — do NOT duplicate keyframes.
+ */
+.animate,
+.cadmin-animate,
+.admin-animate,
+.applicant-animate,
+.od-animate,
+.track-animate,
+.rel-animate,
+.ma-animate {
+  animation: fadeUp .5s cubic-bezier(.22,1,.36,1) both;
+}
+
+/* Delay steps */
+.animate-d1, .cadmin-animate-d1,
+.admin-animate-d1, .applicant-animate-d1, .od-animate-d1,
+.track-animate-d1, .rel-animate-d1, .ma-animate-d1 { animation-delay: .06s; }
+
+.animate-d2, .cadmin-animate-d2,
+.admin-animate-d2, .applicant-animate-d2, .od-animate-d2,
+.track-animate-d2, .rel-animate-d2, .ma-animate-d2 { animation-delay: .12s; }
+
+.animate-d3, .cadmin-animate-d3,
+.admin-animate-d3, .applicant-animate-d3, .od-animate-d3,
+.track-animate-d3, .rel-animate-d3, .ma-animate-d3 { animation-delay: .18s; }
+
+.animate-d4, .cadmin-animate-d4,
+.admin-animate-d4, .applicant-animate-d4, .od-animate-d4,
+.track-animate-d4, .rel-animate-d4, .ma-animate-d4 { animation-delay: .24s; }
+
+.animate-d5, .admin-animate-d5, .od-animate-d5 { animation-delay: .30s; }
+.od-animate-d6                                  { animation-delay: .36s; }

@@ -1,12 +1,42 @@
+/* ============================================================
+   main.css — Single entry point. Import order matters:
+   tokens → reset → layout → components → features → pages
+   ============================================================ */
+
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
 
+/* ── 1. Tokens ─────────────────────────────────────────────── */
 @import 'partials/variables.css';
+
+/* ── 2. Reset & base ───────────────────────────────────────── */
 @import 'partials/base.css';
+
+/* ── 3. Animations & effects ───────────────────────────────── */
+@import 'partials/animations.css';
+@import 'partials/spotlight.css';
+
+/* ── 4. Layout primitives ──────────────────────────────────── */
 @import 'partials/layout.css';
 @import 'partials/navbar.css';
+
+/* ── 5. Core components ────────────────────────────────────── */
+@import 'partials/buttons.css';
 @import 'partials/components.css';
 @import 'partials/forms.css';
-@import 'partials/auth.css';
 @import 'partials/utilities.css';
-@import 'partials/landing.css';
+
+/* ── 6. Shared UI blocks ───────────────────────────────────── */
+@import 'partials/hero.css';
+@import 'partials/cards.css';
+@import 'partials/notifications.css';
+
+/* ── 7. Auth ───────────────────────────────────────────────── */
+@import 'partials/auth.css';
+
+/* ── 8. Dashboards ─────────────────────────────────────────── */
+@import 'partials/dashboard.css';
+
+/* ── 9. Role-specific pages ────────────────────────────────── */
+@import 'partials/admin.css';
 @import 'partials/officer.css';
+@import 'partials/applicant.css';

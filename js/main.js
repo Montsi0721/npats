@@ -3,7 +3,11 @@
 // ─────────────────────────────────────────
 (function applyTheme() {
   const saved = localStorage.getItem('npats_theme');
-  document.documentElement.toggleAttribute('data-theme', saved === 'light');
+  if (saved === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
 })();
 
 // ─────────────────────────────────────────
@@ -33,9 +37,14 @@ function initThemeToggle() {
   if (!btn) return;
 
   btn.addEventListener('click', () => {
-    const isLight = document.documentElement.hasAttribute('data-theme');
-    document.documentElement.toggleAttribute('data-theme', !isLight);
-    localStorage.setItem('npats_theme', isLight ? 'dark' : 'light');
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('npats_theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('npats_theme', 'light');
+    }
   });
 }
 
