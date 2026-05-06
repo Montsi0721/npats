@@ -145,7 +145,7 @@ INSERT INTO users (full_name, username, email, password, role, phone) VALUES
 -- Officer account
 INSERT INTO users (full_name, username, email, password, role, phone) VALUES
 (
-    'John Mokoena',
+    'Mora Mokoena',
     'officer1',
     'officer1@npats.gov.ls',
     '$2b$10$TZ9bb/eyNyyYr8UIDc5N0uNObt9lcyDg1diY9aKF8jHdRByBqL3He',
@@ -163,3 +163,17 @@ INSERT INTO users (full_name, username, email, password, role, phone) VALUES
     'applicant',
     '+26657100003'
 );
+
+-- Insert a special "Unassigned" user
+INSERT INTO users (full_name, username, email, password, role, phone) VALUES 
+(
+    'Unassigned Officer', 
+    'unassigned', 
+    'unassigned@system.local', 
+    'disabled', 
+    'officer',
+    '0000000000'
+);
+
+-- Get the ID of this new user (likely 1 or the next available ID)
+SELECT id FROM users WHERE username = 'unassigned';

@@ -1,8 +1,46 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require_once __DIR__ . '/../includes/config.php';
 requireRole('officer');
 $db  = getDB();
 $uid = $_SESSION['user_id'];
+
+// ── Handle Claim Assignment ──────────────────────────────────
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'assign_application') {
+    $appId = (int)($_POST['application_id'] ?? 0);
+    if ($appId) {
+        // Get the ID of the 'unassigned' user
+        $unassignedStmt = $db->prepare("SELECT id FROM users WHERE username = 'unassigned' LIMIT 1");
+        $unassignedStmt->execute();
+        $unassignedOfficerId = $unassignedStmt->fetchColumn();
+        
+        // Only assign if the application currently has the 'unassigned' user as officer
+        $stmt = $db->prepare('UPDATE passport_applications SET officer_id = ? WHERE id = ? AND officer_id = ?');
+        $stmt->execute([$uid, $appId, $unassignedOfficerId]);
+        if ($stmt->rowCount() > 0) {
+            logActivity($uid, 'ASSIGN_APPLICATION', "Assigned application ID: $appId to officer ID: $uid");
+            flash('success', 'Application assigned to you successfully.');
+        } else {
+            flash('error', 'Application could not be assigned (already assigned or invalid).');
+        }
+    }
+    redirect(APP_URL . '/officer/applications.php');
+}
+
+// Get or create the 'unassigned' user
+$unassignedStmt = $db->prepare("SELECT id FROM users WHERE username = 'unassigned' LIMIT 1");
+$unassignedStmt->execute();
+$unassignedOfficerId = $unassignedStmt->fetchColumn();
+
+// If no 'unassigned' user exists, create one
+if (!$unassignedOfficerId) {
+    $hashedPassword = password_hash('unassigned_default', PASSWORD_BCRYPT);
+    $insertStmt = $db->prepare("INSERT INTO users (username, full_name, email, password, role, is_active) VALUES ('unassigned', 'Unassigned Officer', 'unassigned@system.local', ?, 'officer', 1)");
+    $insertStmt->execute([$hashedPassword]);
+    $unassignedOfficerId = $db->lastInsertId();
+}
 
 $perPage = 15;
 $page    = max(1, (int)($_GET['page'] ?? 1));
@@ -10,13 +48,19 @@ $offset  = ($page - 1) * $perPage;
 $search  = trim($_GET['q'] ?? '');
 $status  = $_GET['status'] ?? '';
 
-$where  = ['pa.officer_id = ?'];
-$params = [$uid];
+// Modified WHERE clause: officer_id = current user OR officer_id = unassigned user
+$where  = ['(pa.officer_id = ? OR pa.officer_id = ?)'];
+$params = [$uid, $unassignedOfficerId];
+
 if ($search) {
     $where[] = '(pa.application_number LIKE ? OR pa.full_name LIKE ? OR pa.national_id LIKE ?)';
-    $w = "%$search%"; $params = array_merge($params, [$w,$w,$w]);
+    $w = "%$search%"; 
+    $params = array_merge($params, [$w, $w, $w]);
 }
-if ($status) { $where[] = 'pa.status = ?'; $params[] = $status; }
+if ($status) { 
+    $where[] = 'pa.status = ?'; 
+    $params[] = $status; 
+}
 $whereSQL = implode(' AND ', $where);
 
 $total = $db->prepare("SELECT COUNT(*) FROM passport_applications pa WHERE $whereSQL");
@@ -24,8 +68,22 @@ $total->execute($params);
 $total = (int)$total->fetchColumn();
 $pages = ceil($total / $perPage);
 
-$stmt = $db->prepare("SELECT * FROM passport_applications pa WHERE $whereSQL ORDER BY pa.created_at DESC LIMIT $perPage OFFSET $offset");
-$stmt->execute($params);
+// Select all relevant fields, including a flag to check if assigned to current user
+$stmt = $db->prepare("
+    SELECT 
+        pa.*, 
+        CASE 
+            WHEN pa.officer_id = ? THEN 1 
+            ELSE 0 
+        END as is_assigned_to_me
+    FROM passport_applications pa 
+    WHERE $whereSQL 
+    ORDER BY 
+        CASE WHEN pa.officer_id = ? THEN 1 ELSE 0 END, 
+        pa.created_at DESC 
+    LIMIT $perPage OFFSET $offset
+");
+$stmt->execute(array_merge([$uid, $unassignedOfficerId], $params));
 $apps = $stmt->fetchAll();
 
 $pageTitle = 'My Applications';
@@ -60,21 +118,30 @@ include __DIR__ . '/../includes/header.php';
 </div>
 
 <!-- Mini Stats Row -->
+<?php
+// Calculate stats for the visible data (all matching records)
+$totalApps = $total;
+$assignedToMe = count(array_filter($apps, fn($a) => $a['officer_id'] == $uid));
+$unassigned = count(array_filter($apps, fn($a) => $a['officer_id'] == $unassignedOfficerId));
+$totalInProgress = count(array_filter($apps, fn($a) => $a['status'] === 'In-Progress'));
+$totalPending = count(array_filter($apps, fn($a) => $a['status'] === 'Pending'));
+$totalCompleted = count(array_filter($apps, fn($a) => $a['status'] === 'Completed'));
+?>
 <div class="stats-row animate animate-d1">
   <div class="stat-mini hover-card">
-    <div class="value"><?= $total ?></div>
-    <div class="label">Total Applications</div>
+    <div class="value"><?= $totalApps ?></div>
+    <div class="label">Total Accessible</div>
   </div>
   <div class="stat-mini hover-card">
-    <div class="value" style="color: #60A5FA;"><?= count(array_filter($apps, fn($a) => $a['status'] === 'In-Progress')) ?></div>
-    <div class="label">In Progress</div>
+    <div class="value" style="color: #3B82F6;"><?= $assignedToMe ?></div>
+    <div class="label">Assigned to Me</div>
   </div>
   <div class="stat-mini hover-card">
-    <div class="value" style="color: #F59E0B;"><?= count(array_filter($apps, fn($a) => $a['status'] === 'Pending')) ?></div>
-    <div class="label">Pending</div>
+    <div class="value" style="color: #F59E0B;"><?= $unassigned ?></div>
+    <div class="label">Unassigned</div>
   </div>
   <div class="stat-mini hover-card">
-    <div class="value" style="color: #34D399;"><?= count(array_filter($apps, fn($a) => $a['status'] === 'Completed')) ?></div>
+    <div class="value" style="color: #34D399;"><?= $totalCompleted ?></div>
     <div class="label">Completed</div>
   </div>
 </div>
@@ -139,25 +206,26 @@ include __DIR__ . '/../includes/header.php';
           <th>Stage</th>
           <th>Status</th>
           <th>Date</th>
+          <th>Assigned To</th>
           <th style="text-align:center;">Actions</th>
         </tr>
       </thead>
       <tbody>
       <?php if (empty($apps)): ?>
         <tr>
-          <td colspan="8">
+          <td colspan="9">
             <div class="empty">
               <div class="empty-icon">
                 <i class="fa fa-inbox"></i>
               </div>
               <h3>No applications found</h3>
-              <p>Start by creating a new passport application.</p>
+              <p>There are no applications available for you to process.</p>
               <a href="<?= APP_URL ?>/officer/new_application.php" class="btn btn-primary">
                 <i class="fa fa-plus"></i> New Application
               </a>
             </div>
-           </td>
-         </tr>
+            </td>
+        </tr>
       <?php else: 
         $idx = 0;
         foreach ($apps as $a): 
@@ -194,16 +262,39 @@ include __DIR__ . '/../includes/header.php';
             <i class="fa fa-calendar"></i> <?= e($a['application_date']) ?>
           </td>
           <td>
+            <?php if ($a['officer_id'] == $unassignedOfficerId): ?>
+              <span class="badge unassigned" style="background: rgba(245,158,11,.15); color: #F59E0B; padding: 4px 8px; border-radius: 20px; font-size: 0.7rem; white-space: nowrap;">
+                <i class="fa fa-user-plus"></i> Unassigned
+              </span>
+            <?php else: ?>
+              <span class="badge assigned" style="background: rgba(59,130,246,.15); color: #3B82F6; padding: 4px 8px; border-radius: 20px; font-size: 0.7rem; white-space: nowrap;">
+                <i class="fa fa-user-check"></i> Assigned to Me
+              </span>
+            <?php endif; ?>
+           </td>
+          <td>
             <div class="action-buttons">
-              <a href="<?= APP_URL ?>/officer/manage_application.php?id=<?= $a['id'] ?>" class="action-btn" title="Manage Application">
-                <i class="fa fa-edit"></i>
-              </a>
+              <?php if ($a['officer_id'] == $unassignedOfficerId): ?>
+                <!-- Assign Button for Unassigned Applications -->
+                <form method="POST" style="display:inline;" onsubmit="return confirm('Assign this application to yourself? You will become responsible for processing it.');">
+                  <input type="hidden" name="action" value="assign_application">
+                  <input type="hidden" name="application_id" value="<?= $a['id'] ?>">
+                  <button type="submit" class="action-btn assign" title="Assign to Me" style="color: #10B981;">
+                    <i class="fa fa-hand-peace"></i>
+                  </button>
+                </form>
+              <?php else: ?>
+                <!-- Manage Button for Assigned Applications -->
+                <a href="<?= APP_URL ?>/officer/manage_application.php?id=<?= $a['id'] ?>" class="action-btn" title="Manage Application">
+                  <i class="fa fa-edit"></i>
+                </a>
+              <?php endif; ?>
               <a href="<?= APP_URL ?>/public_track.php?app_num=<?= urlencode($a['application_number']) ?>" class="action-btn view" title="Public View" target="_blank">
                 <i class="fa fa-eye"></i>
               </a>
             </div>
-          </td>
-        </tr>
+           </td>
+         </tr>
       <?php endforeach; endif; ?>
       </tbody>
     </table>

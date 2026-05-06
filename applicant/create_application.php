@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
 require_once __DIR__ . '/../includes/config.php';
 requireRole('applicant');
 $db  = getDB();
@@ -66,6 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         $appNum = generateApplicationNumber();
 
+        $unassignedStmt = $db->prepare("SELECT id FROM users WHERE username = 'unassigned' LIMIT 1");
+        $unassignedStmt->execute();
+        $unassignedOfficerId = $unassignedStmt->fetchColumn();
+
         $stmt = $db->prepare('INSERT INTO passport_applications
             (application_number, applicant_user_id, officer_id,
              full_name, national_id, date_of_birth, gender,
@@ -73,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              photo_path, current_stage, status)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([
-            $appNum, $uid, $uid,
+            $appNum, $uid, $unassignedOfficerId,
             $data['full_name'], $data['national_id'], $data['date_of_birth'],
             $data['gender'], $data['address'], $data['phone'], $data['email'],
             $data['passport_type'], date('Y-m-d'), $photoPath,
@@ -91,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($allStages as $stage) {
             $stStatus  = ($stage === 'Application Submitted') ? 'Completed' : 'Pending';
             $comment   = ($stage === 'Application Submitted') ? 'Self-submitted by applicant' : null;
-            $ins->execute([$appId, $stage, $stStatus, $uid, $comment]);
+            $ins->execute([$appId, $stage, $stStatus, $unassignedOfficerId, $comment]);
         }
 
         addNotification($uid, $appId,

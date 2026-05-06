@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = trim($_POST['username'] ?? '');
         $email    = trim($_POST['email'] ?? '');
         $phone    = trim($_POST['phone'] ?? '');
-        $role     = $_POST['role'] ?? 'applicant';
+        $role     = $_POST['role'] ?? 'officer';
         $pass     = $_POST['password'] ?? '';
 
         if ($name && $username && $email && $pass) {
@@ -157,8 +157,8 @@ $applicantCount = count(array_filter($users, fn($u) => $u['role'] === 'applicant
               <h3>No users found</h3>
               <p>Click "Add User" to create your first user account.</p>
             </div>
-          </td>
-        </tr>
+           </td>
+         </tr>
       <?php else: foreach ($users as $i => $u): ?>
         <tr data-searchable="<?= strtolower(e($u['full_name'] . ' ' . $u['username'] . ' ' . $u['email'] . ' ' . $u['role'])) ?>">
           <td><?= $i+1 ?></td>
@@ -220,7 +220,7 @@ $applicantCount = count(array_filter($users, fn($u) => $u['role'] === 'applicant
         <div class="form-grid">
           <div class="input-wrap form-group full">
             <label><i class="fa fa-user"></i> Full Name *</label>
-            <input type="text" name="full_name" required placeholder="e.g., John Doe">
+            <input type="text" name="full_name" required placeholder="e.g., Rets'elisitsoe Mohale">
           </div>
           <div class="input-wrap form-group">
             <label><i class="fa fa-at"></i> Username *</label>
@@ -236,11 +236,22 @@ $applicantCount = count(array_filter($users, fn($u) => $u['role'] === 'applicant
           </div>
           <div class="input-wrap form-group">
             <label><i class="fa fa-tag"></i> Role *</label>
-            <select name="role">
-              <option value="applicant">Applicant</option>
-              <option value="officer">Officer</option>
-              <option value="admin">Administrator</option>
-            </select>
+            <!-- Custom Select for Role -->
+            <div class="custom-select" id="roleSelect">
+              <div class="custom-select-trigger">
+                <span class="selected-text">Officer</span>
+                <i class="fa fa-chevron-down arrow"></i>
+              </div>
+              <div class="custom-select-dropdown">
+                <div class="custom-select-option" data-value="officer">
+                  <i class="fa fa-id-badge"></i> Officer
+                </div>
+                <div class="custom-select-option" data-value="admin">
+                  <i class="fa fa-shield"></i> Administrator
+                </div>
+              </div>
+              <input type="hidden" name="role" id="roleInput" value="applicant">
+            </div>
           </div>
           <div class="form-group full">
             <label><i class="fa fa-lock"></i> Password * <span style="color:var(--muted);font-weight:400;">(min. 6 chars)</span></label>
@@ -325,6 +336,72 @@ $applicantCount = count(array_filter($users, fn($u) => $u['role'] === 'applicant
     });
   });
 })();
+
+// Consolidated Custom Select Initialization
+function initCustomSelect(selectId, hiddenId) {
+  const container = document.getElementById(selectId);
+  if (!container) return;
+  
+  const trigger = container.querySelector('.custom-select-trigger');
+  const dropdown = container.querySelector('.custom-select-dropdown');
+  const hiddenInput = document.getElementById(hiddenId);
+  const selectedSpan = trigger.querySelector('.selected-text');
+  const options = container.querySelectorAll('.custom-select-option');
+  const currentValue = hiddenInput.value;
+  
+  // Set initial selected text and class
+  options.forEach(opt => {
+    if (opt.dataset.value === currentValue) {
+      opt.classList.add('selected');
+      // Extract text content without the icon
+      const optText = opt.childNodes[opt.childNodes.length - 1].textContent.trim();
+      selectedSpan.textContent = optText;
+    }
+  });
+  
+  // Toggle dropdown
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    // Close other dropdowns
+    document.querySelectorAll('.custom-select-dropdown.show').forEach(d => {
+      if (d !== dropdown) d.classList.remove('show');
+    });
+    document.querySelectorAll('.custom-select-trigger.open').forEach(t => {
+      if (t !== trigger) t.classList.remove('open');
+    });
+    dropdown.classList.toggle('show');
+    trigger.classList.toggle('open');
+  });
+  
+  // Option selection
+  options.forEach(opt => {
+    opt.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const value = opt.dataset.value;
+      hiddenInput.value = value;
+      // Extract text without icon
+      const optText = opt.childNodes[opt.childNodes.length - 1].textContent.trim();
+      selectedSpan.textContent = optText;
+      
+      options.forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      
+      dropdown.classList.remove('show');
+      trigger.classList.remove('open');
+    });
+  });
+  
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    if (!container.contains(e.target)) {
+      dropdown.classList.remove('show');
+      trigger.classList.remove('open');
+    }
+  });
+}
+
+// Initialize Role custom select
+initCustomSelect('roleSelect', 'roleInput');
 
 // Modal functions
 function openModal(modalId) {

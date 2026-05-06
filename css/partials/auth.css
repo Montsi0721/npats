@@ -278,11 +278,8 @@
     position: fixed;
     inset: 0;
     z-index: 0;
-    /* Keep showing it — don't hide it */
     display: flex;
     padding: 2rem;
-    /* Slightly darken so the form stays legible */
-    background: #0B1525;
   }
 
   /* Dim features list on mobile so it doesn't distract */
@@ -295,14 +292,12 @@
     position: relative;
     z-index: 1;
     min-height: 100vh;
-    background: rgba(13, 17, 23, .82);
+    background: rgba(13, 17, 23, .7);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     padding: 2rem 1.25rem;
-    /* Remove the ::before gradient override from the old code */
   }
 
-  /* Remove the duplicate ::before that was previously applied on mobile */
   .auth-form-panel::before {
     display: none;
   }

@@ -50,7 +50,7 @@ The system is built to run on **XAMPP (Apache + MySQL + PHP)** at `http://localh
 
 - **Frontend:** HTML5, CSS3 (custom design system), Vanilla JavaScript
 - **Backend:** PHP 8.1+ (PDO, prepared statements)
-- **Database:** MySQL 8 (via phpMyAdmin or CLI)
+- **Database:** MySQL 8 (via phpMyAdmin)
 - **Server:** Apache via XAMPP
 - **Icons:** Font Awesome 6.5
 - **Fonts:** DM Sans (Google Fonts)
@@ -60,13 +60,13 @@ The system is built to run on **XAMPP (Apache + MySQL + PHP)** at `http://localh
 ## Project Structure
 
 ```
-/npats/
+/opt/lampp/htdocs/npats/
+├─] .env (ignored)
+├── .gitignore
 ├── README.md
 ├── admin/
 │   ├── activity.php
 │   ├── applications.php
-│   ├── create_admin.php
-│   ├── create_officer.php
 │   ├── dashboard.php
 │   ├── reports.php
 │   ├── users.php
@@ -79,6 +79,8 @@ The system is built to run on **XAMPP (Apache + MySQL + PHP)** at `http://localh
 ├── assets/
 │   ├── headerIcon.png
 │   └── photos/
+├── composer.json
+├── composer.lock
 ├── css/
 │   ├── main.css
 │   └── partials/
@@ -98,17 +100,22 @@ The system is built to run on **XAMPP (Apache + MySQL + PHP)** at `http://localh
 │       ├── navbar.css
 │       ├── notifications.css
 │       ├── officer.css
+│       ├── scene-bg.css
 │       ├── spotlight.css
 │       └── utilities.css
 ├── includes/
 │   ├── config.php
 │   ├── footer.php
-│   └── header.php
+│   ├── header.php
+│   └── notificationService.php
 ├── index.html
 ├── js/
 │   ├── dashboard.js
 │   ├── landing.js
-│   └── main.js
+│   ├── main.js
+│   ├── scene-bg.js
+│   ├── select.js
+│   └── spotlight.js
 ├── login.php
 ├── logout.php
 ├── notifications.php
@@ -119,8 +126,154 @@ The system is built to run on **XAMPP (Apache + MySQL + PHP)** at `http://localh
 │   ├── manage_application.php
 │   ├── new_application.php
 │   └── releases.php
+├── public_track.php
 ├── signup.php
-└── unauthorized.php
+├── unauthorized.php
+└── vendor/
+    ├── autoload.php
+    ├── composer/
+    │   ├── ClassLoader.php
+    │   ├── InstalledVersions.php
+    │   ├── LICENSE
+    │   ├── autoload_classmap.php
+    │   ├── autoload_files.php
+    │   ├── autoload_namespaces.php
+    │   ├── autoload_psr4.php
+    │   ├── autoload_real.php
+    │   ├── autoload_static.php
+    │   ├── installed.json
+    │   ├── installed.php
+    │   └── platform_check.php
+    ├── graham-campbell/
+    │   └── result-type/
+    │       ├── LICENSE
+    │       ├── composer.json
+    │       └── src/
+    │           ├── Error.php
+    │           ├── Result.php
+    │           └── Success.php
+    ├── phpmailer/
+    │   └── phpmailer/
+    │       ├── COMMITMENT
+    │       ├── LICENSE
+    │       ├── README.md
+    │       ├── SECURITY.md
+    │       ├── SMTPUTF8.md
+    │       ├── VERSION
+    │       ├── composer.json
+    │       ├── get_oauth_token.php
+    │       ├── language/
+    │       │   ├── phpmailer.lang-af.php
+    │       │   ├── ...
+    │       │   └── phpmailer.lang-zh_cn.php
+    │       └── src/
+    │           ├── DSNConfigurator.php
+    │           ├── Exception.php
+    │           ├── OAuth.php
+    │           ├── OAuthTokenProvider.php
+    │           ├── PHPMailer.php
+    │           ├── POP3.php
+    │           └── SMTP.php
+    ├── phpoption/
+    │   └── phpoption/
+    │       ├── LICENSE
+    │       ├── composer.json
+    │       └── src/
+    │           └── PhpOption/
+    │               ├── LazyOption.php
+    │               ├── None.php
+    │               ├── Option.php
+    │               └── Some.php
+    ├── symfony/
+    │   ├── polyfill-ctype/
+    │   │   ├── Ctype.php
+    │   │   ├── LICENSE
+    │   │   ├── README.md
+    │   │   ├── bootstrap.php
+    │   │   ├── bootstrap80.php
+    │   │   └── composer.json
+    │   ├── polyfill-mbstring/
+    │   │   ├── LICENSE
+    │   │   ├── Mbstring.php
+    │   │   ├── README.md
+    │   │   ├── Resources/
+    │   │   │   └── unidata/
+    │   │   │       ├── caseFolding.php
+    │   │   │       ├── lowerCase.php
+    │   │   │       ├── titleCaseRegexp.php
+    │   │   │       └── upperCase.php
+    │   │   ├── bootstrap.php
+    │   │   ├── bootstrap80.php
+    │   │   └── composer.json
+    │   └── polyfill-php80/
+    │       ├── LICENSE
+    │       ├── Php80.php
+    │       ├── PhpToken.php
+    │       ├── README.md
+    │       ├── Resources/
+    │       │   └── stubs/
+    │       │       ├── Attribute.php
+    │       │       ├── PhpToken.php
+    │       │       ├── Stringable.php
+    │       │       ├── UnhandledMatchError.php
+    │       │       └── ValueError.php
+    │       ├── bootstrap.php
+    │       └── composer.json
+    └── vlucas/
+        └── phpdotenv/
+            ├── LICENSE
+            ├── composer.json
+            └── src/
+                ├── Dotenv.php
+                ├── Exception/
+                │   ├── ExceptionInterface.php
+                │   ├── InvalidEncodingException.php
+                │   ├── InvalidFileException.php
+                │   ├── InvalidPathException.php
+                │   └── ValidationException.php
+                ├── Loader/
+                │   ├── Loader.php
+                │   ├── LoaderInterface.php
+                │   └── Resolver.php
+                ├── Parser/
+                │   ├── Entry.php
+                │   ├── EntryParser.php
+                │   ├── Lexer.php
+                │   ├── Lines.php
+                │   ├── Parser.php
+                │   ├── ParserInterface.php
+                │   └── Value.php
+                ├── Repository/
+                │   ├── Adapter/
+                │   │   ├── AdapterInterface.php
+                │   │   ├── ApacheAdapter.php
+                │   │   ├── ArrayAdapter.php
+                │   │   ├── EnvConstAdapter.php
+                │   │   ├── GuardedWriter.php
+                │   │   ├── ImmutableWriter.php
+                │   │   ├── MultiReader.php
+                │   │   ├── MultiWriter.php
+                │   │   ├── PutenvAdapter.php
+                │   │   ├── ReaderInterface.php
+                │   │   ├── ReplacingWriter.php
+                │   │   ├── ServerConstAdapter.php
+                │   │   └── WriterInterface.php
+                │   ├── AdapterRepository.php
+                │   ├── RepositoryBuilder.php
+                │   └── RepositoryInterface.php
+                ├── Store/
+                │   ├── File/
+                │   │   ├── Paths.php
+                │   │   └── Reader.php
+                │   ├── FileStore.php
+                │   ├── StoreBuilder.php
+                │   ├── StoreInterface.php
+                │   └── StringStore.php
+                ├── Util/
+                │   ├── Regex.php
+                │   └── Str.php
+                └── Validator.php
+
 ```
 
 ---
