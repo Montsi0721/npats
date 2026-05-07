@@ -247,7 +247,6 @@
                         <div class="custom-select-dropdown">
                             <div class="custom-select-option" data-value="Male">Male</div>
                             <div class="custom-select-option" data-value="Female">Female</div>
-                            <div class="custom-select-option" data-value="Other">Other</div>
                         </div>
                         <input type="hidden" name="gender" id="genderInput" value="<?= e($data['gender'] ?? '') ?>">
                     </div>
@@ -298,7 +297,7 @@
                 
                 <!-- Photo Upload -->
                 <div class="form-group full">
-                    <label><i class="fa fa-camera"></i> Applicant Photo <span style="font-weight: normal; font-size: 0.75rem;">(optional but recommended)</span></label>
+                    <label><i class="fa fa-camera"></i> Applicant Photo</label>
                     <div class="photo-upload">
                         <div class="photo-box" id="photoDropzone">
                             <div class="photo-placeholder">

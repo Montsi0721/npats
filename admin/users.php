@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     redirect(APP_URL . '/admin/users.php');
 }
 
-$users = $db->query('SELECT * FROM users ORDER BY created_at DESC')->fetchAll();
+$users = $db->query("SELECT * FROM users WHERE username != 'unassigned' ORDER BY created_at DESC")->fetchAll();
 $pageTitle = 'Manage Users';
 include __DIR__ . '/../includes/header.php';
 ?>

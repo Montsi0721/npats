@@ -4,7 +4,7 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'npats');
 define('APP_NAME', 'NPATS');
-define('APP_URL',  'http://localhost/npats');
+define('APP_URL',  'http://localhost/2438023_khotso_montsi');
 define('UPLOAD_DIR', __DIR__ . '/../assets/photos/');
 define('UPLOAD_URL', APP_URL . '/assets/photos/');
 

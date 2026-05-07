@@ -24,6 +24,26 @@
         'Background Check','Passport Printing','Ready for Collection','Passport Released'
     ];
 
+    // Function to check if previous stages are completed
+    function canUpdateStage($db, $applicationId, $stageName, $stageMap) {
+        $stageIndex = array_search($stageName, $GLOBALS['allStages']);
+        if ($stageIndex === false || $stageIndex === 0) {
+            return true; // First stage can always be updated
+        }
+        
+        // Check all previous stages
+        for ($i = 0; $i < $stageIndex; $i++) {
+            $prevStage = $GLOBALS['allStages'][$i];
+            $prevStageData = $stageMap[$prevStage] ?? null;
+            
+            // If previous stage doesn't exist or is not completed, cannot update current stage
+            if (!$prevStageData || $prevStageData['status'] !== 'Completed') {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // Handle stage update
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_stage'])) {
         $stageName = $_POST['stage_name'] ?? '';
@@ -32,6 +52,26 @@
         $validStatuses = ['Pending','In-Progress','Completed','Rejected'];
 
         if (in_array($stageName, $allStages) && in_array($status, $validStatuses)) {
+            // Get current stages to check previous completion
+            $stagesQ = $db->prepare('SELECT * FROM processing_stages WHERE application_id=?');
+            $stagesQ->execute([$id]);
+            $currentStages = $stagesQ->fetchAll();
+            $currentStageMap = array_column($currentStages, null, 'stage_name');
+            
+            // Check if previous stages are completed
+            if (!canUpdateStage($db, $id, $stageName, $currentStageMap)) {
+                flash('error', 'Cannot update this stage. Please complete all previous stages first.');
+                redirect(APP_URL . '/officer/manage_application.php?id=' . $id);
+            }
+            
+            // If trying to mark as In-Progress or Completed, check if previous stages are done
+            if (in_array($status, ['In-Progress', 'Completed'])) {
+                if (!canUpdateStage($db, $id, $stageName, $currentStageMap)) {
+                    flash('error', 'Cannot update this stage. Please complete all previous stages first.');
+                    redirect(APP_URL . '/officer/manage_application.php?id=' . $id);
+                }
+            }
+            
             $check = $db->prepare('SELECT id FROM processing_stages WHERE application_id=? AND stage_name=?');
             $check->execute([$id, $stageName]);
             if ($check->fetch()) {
@@ -64,12 +104,25 @@
                     $notifStmt->execute([$app['applicant_user_id'], $id, $message]);
                 }
                 
-                if (function_exists('sendApplicationEmail')) {
-                    sendApplicationEmail($app['email'], $app['application_number'], $stageName, $status);
+                // Only send email and SMS when passport is ready for collection OR released
+                $shouldSendExternalNotifications = false;
+                
+                if ($stageName === 'Ready for Collection' && $status === 'Completed') {
+                    $shouldSendExternalNotifications = true;
+                    $externalMessage = "Your passport ({$app['application_number']}) is ready for collection. Please visit the passport office.";
+                } elseif ($stageName === 'Passport Released' && $status === 'Completed') {
+                    $shouldSendExternalNotifications = true;
+                    $externalMessage = "Your passport ({$app['application_number']}) has been released. You can now collect it from the passport office.";
                 }
                 
-                if (function_exists('sendApplicationSMS')) {
-                    sendApplicationSMS($app['phone'], $app['application_number'], $stageName, $status);
+                if ($shouldSendExternalNotifications) {
+                    if (function_exists('sendApplicationEmail')) {
+                        sendApplicationEmail($app['email'], $app['application_number'], $stageName, $status, $externalMessage ?? null);
+                    }
+                    
+                    if (function_exists('sendApplicationSMS')) {
+                        sendApplicationSMS($app['phone'], $app['application_number'], $stageName, $status, $externalMessage ?? null);
+                    }
                 }
             }
 
@@ -237,6 +290,16 @@
                 'rejected' => '✗',
                 default => ($idx + 1)
             };
+            
+            // Check if this stage can be updated (previous stages completed)
+            $canUpdate = true;
+            if ($idx > 0) {
+                $prevStageName = $allStages[$idx - 1];
+                $prevStage = $stageMap[$prevStageName] ?? null;
+                if (!$prevStage || $prevStage['status'] !== 'Completed') {
+                    $canUpdate = false;
+                }
+            }
         ?>
         <div class="timeline-item <?= $statusClass ?> hover-card" style="--i: <?= $idx++ ?>" data-spotlight>
             <div class="timeline-marker">
@@ -246,9 +309,15 @@
                 <div class="timeline-header">
                     <span class="timeline-stage"><?= e($stageName) ?></span>
                     <span class="timeline-status <?= $statusBadgeClass ?>"><?= $statusLabel ?></span>
-                    <button class="update-btn" onclick="openStageModal('<?= addslashes($stageName) ?>', '<?= $status ?>', '<?= addslashes($st['comments'] ?? '') ?>')">
-                        <i class="fa fa-edit"></i> Update
-                    </button>
+                    <?php if ($canUpdate): ?>
+                        <button class="update-btn" onclick="openStageModal('<?= addslashes($stageName) ?>', '<?= $status ?>', '<?= addslashes($st['comments'] ?? '') ?>')">
+                            <i class="fa fa-edit"></i> Update
+                        </button>
+                    <?php else: ?>
+                        <button class="update-btn" disabled style="opacity: 0.5; cursor: not-allowed;" title="Complete previous stages first">
+                            <i class="fa fa-lock"></i> Locked
+                        </button>
+                    <?php endif; ?>
                 </div>
                 <?php if ($st && $st['updated_at']): ?>
                 <div class="timeline-meta">
@@ -259,6 +328,11 @@
                 <?php if ($st && !empty($st['comments'])): ?>
                 <div class="timeline-comments">
                     <i class="fa fa-comment"></i> <?= e($st['comments']) ?>
+                </div>
+                <?php endif; ?>
+                <?php if (!$canUpdate && $idx > 1): ?>
+                <div class="timeline-warning" style="font-size: 0.7rem; color: #F59E0B; margin-top: 5px;">
+                    <i class="fa fa-info-circle"></i> Complete "<?= e($allStages[$idx - 2]) ?>" first
                 </div>
                 <?php endif; ?>
             </div>
@@ -754,6 +828,27 @@ window.addEventListener('click', function(e) {
     100% {
         transform: rotate(360deg);
     }
+}
+
+/* Disabled button styles */
+.update-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #6b7280;
+}
+
+.update-btn:disabled:hover {
+    transform: none;
+    background: #6b7280;
+}
+
+.timeline-warning {
+    font-size: 0.7rem;
+    color: #F59E0B;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 </style>
 

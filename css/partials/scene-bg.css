@@ -1,9 +1,3 @@
-/* ============================================================
-   scene-bg.css — Universal 3D particle background
-   Include ONCE per page, after base.css.
-   The canvas is fixed behind all content; pages scroll normally.
-   ============================================================ */
-
 /* ── Background canvas ─────────────────────────────────────── */
 #scene-bg-canvas {
   position: fixed;

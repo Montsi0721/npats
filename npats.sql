@@ -10,9 +10,6 @@
 CREATE DATABASE IF NOT EXISTS npats CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE npats;
 
--- --------------------------------------------------------
--- Table: users
--- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS users (
     id          INT AUTO_INCREMENT PRIMARY KEY,
     full_name   VARCHAR(150) NOT NULL,
@@ -26,9 +23,6 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at  DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- --------------------------------------------------------
--- Table: passport_applications
--- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS passport_applications (
     id                 INT AUTO_INCREMENT PRIMARY KEY,
     application_number VARCHAR(20)  NOT NULL UNIQUE,
@@ -37,7 +31,7 @@ CREATE TABLE IF NOT EXISTS passport_applications (
     full_name          VARCHAR(150) NOT NULL,
     national_id        VARCHAR(30)  NOT NULL,
     date_of_birth      DATE         NOT NULL,
-    gender             ENUM('Male','Female','Other') NOT NULL,
+    gender             ENUM('Male','Female') NOT NULL,
     address            TEXT         NOT NULL,
     phone              VARCHAR(20)  NOT NULL,
     email              VARCHAR(150) NOT NULL,
@@ -60,9 +54,6 @@ CREATE TABLE IF NOT EXISTS passport_applications (
     FOREIGN KEY (applicant_user_id) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
--- --------------------------------------------------------
--- Table: processing_stages
--- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS processing_stages (
     id             INT AUTO_INCREMENT PRIMARY KEY,
     application_id INT NOT NULL,
@@ -84,9 +75,6 @@ CREATE TABLE IF NOT EXISTS processing_stages (
     UNIQUE KEY uq_app_stage (application_id, stage_name)
 ) ENGINE=InnoDB;
 
--- --------------------------------------------------------
--- Table: passport_releases
--- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS passport_releases (
     id               INT AUTO_INCREMENT PRIMARY KEY,
     application_id   INT          NOT NULL UNIQUE,
@@ -99,9 +87,6 @@ CREATE TABLE IF NOT EXISTS passport_releases (
     FOREIGN KEY (officer_id)     REFERENCES users(id) ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
--- --------------------------------------------------------
--- Table: activity_log
--- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS activity_log (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     user_id    INT          DEFAULT NULL,
@@ -112,9 +97,6 @@ CREATE TABLE IF NOT EXISTS activity_log (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
--- --------------------------------------------------------
--- Table: notifications
--- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS notifications (
     id             INT AUTO_INCREMENT PRIMARY KEY,
     user_id        INT          DEFAULT NULL,
@@ -126,10 +108,8 @@ CREATE TABLE IF NOT EXISTS notifications (
     FOREIGN KEY (application_id) REFERENCES passport_applications(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- ============================================================
 -- SEED DATA
 -- All three accounts use password: password
--- ============================================================
 
 -- Admin account
 INSERT INTO users (full_name, username, email, password, role, phone) VALUES
@@ -156,9 +136,9 @@ INSERT INTO users (full_name, username, email, password, role, phone) VALUES
 -- Applicant account
 INSERT INTO users (full_name, username, email, password, role, phone) VALUES
 (
-    'Thabo Nkosi',
+    'Will Smith',
     'applicant1',
-    'thabo@example.com',
+    'will@example.com',
     '$2b$10$8GjAHJ.qIVxXpT.Ww/oOhOp058PLVOyIvwBASpfe6ToGNPQWYqP0K',
     'applicant',
     '+26657100003'
@@ -174,6 +154,3 @@ INSERT INTO users (full_name, username, email, password, role, phone) VALUES
     'officer',
     '0000000000'
 );
-
--- Get the ID of this new user (likely 1 or the next available ID)
-SELECT id FROM users WHERE username = 'unassigned';

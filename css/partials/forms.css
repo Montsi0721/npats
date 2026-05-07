@@ -371,6 +371,7 @@ textarea {
   background: var(--bg-alt);
   border: 1.5px solid var(--border);
   border-radius: var(--radius);
+  backdrop-filter: blur(10px);
   z-index: 1000;
   display: none;
   max-height: 200px;

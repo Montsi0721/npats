@@ -119,7 +119,7 @@ include __DIR__ . '/../includes/header.php';
     </div>
   </div>
 
-  <!-- Processing Progress Card -->
+  <!-- Processing Progress Card with Table -->
   <div class="app-card hover-card">
     <div class="card-header">
       <span class="card-title"><i class="fa fa-tasks"></i> Processing Progress</span>
@@ -127,46 +127,69 @@ include __DIR__ . '/../includes/header.php';
         <?= count(array_filter($stages, fn($s) => $s['status'] === 'Completed')) ?>/<?= count($allStages) ?> completed
       </span>
     </div>
-    <div class="card-body">
-      <div class="stage-timeline">
-        <?php foreach ($allStages as $i => $stageName):
-          $st     = $stageMap[$stageName] ?? null;
-          $status = $st['status'] ?? 'Pending';
-          $cls    = match($status) { 
-            'Completed' => 'done',
-            'In-Progress' => 'active',
-            'Rejected' => 'rejected',
-            default => 'pending' 
-          };
-          $icon = match($status) {
-            'Completed' => '<i class="fa fa-check"></i>',
-            'Rejected' => '<i class="fa fa-times"></i>',
-            'In-Progress' => '<i class="fa fa-spinner fa-pulse"></i>',
-            default => ($i + 1)
-          };
-        ?>
-        <div class="stage-item <?= $cls ?>">
-          <div class="stage-dot"><?= $icon ?></div>
-          <div class="stage-info">
-            <h4><?= e($stageName) ?></h4>
-            <span class="status-badge status-<?= strtolower(str_replace(' ', '-', $status)) ?>">
-              <?= e($status) ?>
-            </span>
-            <?php if ($st && $st['updated_at']): ?>
-              <div class="stage-date">
-                <i class="fa fa-calendar-alt"></i>
-                <?= date('d M Y, H:i', strtotime($st['updated_at'])) ?>
-              </div>
-            <?php endif; ?>
-            <?php if ($st && $st['comments']): ?>
-              <div class="stage-comment">
-                <i class="fa fa-comment"></i> <?= e($st['comments']) ?>
-              </div>
-            <?php endif; ?>
-          </div>
-        </div>
-        <?php endforeach; ?>
-      </div>
+    <div class="card-body" style="margin: -25px;">
+        <table class="progress-table">
+          <thead>
+            <tr>
+              <th width="5%">#</th>
+              <th width="25%">Stage Name</th>
+              <th width="15%">Status</th>
+              <th width="25%">Date/Time</th>
+              <th width="30%">Comments</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($allStages as $i => $stageName):
+              $st     = $stageMap[$stageName] ?? null;
+              $status = $st['status'] ?? 'Pending';
+              $statusClass = strtolower(str_replace(' ', '-', $status));
+              $icon = match($status) {
+                'Completed' => '<i class="fa fa-check-circle" style="color: #34D399;"></i>',
+                'Rejected' => '<i class="fa fa-times-circle" style="color: #F87171;"></i>',
+                'In-Progress' => '<i class="fa fa-spinner fa-pulse" style="color: #60A5FA;"></i>',
+                default => '<i class="fa fa-clock" style="color: #9CA3AF;"></i>'
+              };
+            ?>
+            <tr class="stage-row status-<?= $statusClass ?>">
+              <td style="text-align: center;"><?= $icon ?></td>
+              <td>
+                <strong><?= e($stageName) ?></strong>
+                <?php if ($st && $st['officer_name']): ?>
+                  <div class="stage-officer" style="font-size: 0.7rem; color: var(--muted); margin-top: 4px;">
+                    <i class="fa fa-user-check"></i> <?= e($st['officer_name']) ?>
+                  </div>
+                <?php endif; ?>
+              </td>
+              <td>
+                <span class="status-badge status-<?= $statusClass ?>">
+                  <?= e($status) ?>
+                </span>
+              </td>
+              <td style="font-size: 0.8rem;">
+                <?php if ($st && $st['updated_at']): ?>
+                  <i class="fa fa-calendar-alt" style="margin-right: 6px;"></i>
+                  <?= date('d M Y', strtotime($st['updated_at'])) ?>
+                  <br>
+                  <i class="fa fa-clock" style="margin-right: 6px; font-size: 0.7rem;"></i>
+                  <span style="font-size: 0.7rem;"><?= date('H:i:s', strtotime($st['updated_at'])) ?></span>
+                <?php else: ?>
+                  <span style="color: var(--muted);">—</span>
+                <?php endif; ?>
+              </td>
+              <td>
+                <?php if ($st && $st['comments']): ?>
+                  <div class="stage-comment" style="font-size: 0.8rem;">
+                    <i class="fa fa-comment" style="margin-right: 6px; color: var(--info);"></i>
+                    <?= e($st['comments']) ?>
+                  </div>
+                <?php else: ?>
+                  <span style="color: var(--muted); font-size: 0.8rem;">—</span>
+                <?php endif; ?>
+              </td>
+            </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
     </div>
   </div>
 
@@ -192,6 +215,72 @@ include __DIR__ . '/../includes/header.php';
 
 </div>
 <?php endif; ?>
+
+<style>
+/* Progress Table Styles */
+.progress-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.progress-table thead th {
+  text-align: left;
+  padding: 12px 16px;
+  background: rgba(59, 130, 246, 0.05);
+  border-bottom: 2px solid rgba(59, 130, 246, 0.2);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.progress-table tbody td {
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  vertical-align: top;
+}
+
+.progress-table tbody tr:hover {
+  background: rgba(59, 130, 246, 0.03);
+}
+
+.stage-row.status-completed {
+  background: rgba(52, 211, 153, 0.03);
+}
+
+.stage-row.status-in-progress {
+  background: rgba(96, 165, 250, 0.03);
+}
+
+.stage-row.status-pending {
+  opacity: 0.7;
+}
+
+.stage-comment {
+  max-width: 250px;
+  word-wrap: break-word;
+}
+
+.stage-officer {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@media print {
+  .progress-table thead th {
+    background: #f0f0f0;
+    color: #000;
+  }
+  
+  .progress-table tbody td {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .status-badge {
+    border: 1px solid #ddd;
+  }
+}
+</style>
 
 <script>
 // Spotlight effect for hover-card elements
