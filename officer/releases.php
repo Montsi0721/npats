@@ -308,8 +308,8 @@ if (isset($_GET['print_report']) && isset($_GET['release_id'])) {
                 <button onclick="window.print();" class="print-button">
                     <i class="fas fa-print"></i> Print
                 </button>
-                <button onclick="window.close();" class="print-button secondary">
-                    <i class="fas fa-times"></i> Close
+                <button onclick="history.back();" class="print-button secondary">
+                    <i class="fas fa-arrow-left"></i> Go Back
                 </button>
             </div>
             
@@ -338,7 +338,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['release_passport'])) 
     } elseif (!$collectionDate) {
         flash('error', 'Collection date is required.');
     } else {
-        $ins = $db->prepare('INSERT INTO passport_releases (application_id,collection_date,applicant_name,officer_id,notes,released_at) VALUES (?,?,?,?,?,NOW())');
+        $ins = $db->prepare('INSERT INTO passport_releases (application_id,collection_date,applicant_name,officer_id,notes,created_at) VALUES (?,?,?,?,?,NOW())');
         $ins->execute([$appId, $collectionDate, $appRow['full_name'], $uid, $notes]);
         $releaseId = $db->lastInsertId();
 

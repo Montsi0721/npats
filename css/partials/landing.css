@@ -980,30 +980,35 @@ section {
 }
 
 /* ── CTA section ──────────────────────────────────────────── */
-.cta-section {
-  padding: 7rem 3rem;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.cta-section::before {
+.cta-inner::before {
   content: '';
   position: absolute;
   inset: 0;
+  pointer-events: none;
   background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(59, 130, 246, .15) 0%, transparent 65%);
 }
 
-.cta-section::after {
+.cta-inner::after {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(rgba(59, 130, 246, .4) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, .1) 1px, transparent 1px);
+  background-image: 
+  linear-gradient(
+    rgba(59, 130, 246, .4) 1px, 
+    transparent 1px
+    ), 
+  linear-gradient(90deg, 
+    rgba(59, 130, 246, .1) 1px, 
+    transparent 1px
+  );
+  pointer-events: none;
   background-size: 50px 50px;
   mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 0%, transparent 70%);
 }
 
 .cta-inner {
+  padding: 7rem 3rem;
+  text-align: center;
   position: relative;
   z-index: 1;
 }
@@ -1048,6 +1053,11 @@ section {
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
+  pointer-events: all;
+  isolation: isolate;
+  z-index: 10;
+  pointer-events: all;
+  cursor: pointer;
 }
 
 /* ── Footer ───────────────────────────────────────────────── */
